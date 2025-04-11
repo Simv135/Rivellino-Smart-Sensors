@@ -4,26 +4,37 @@ import time
 import re
 import os
 
-porta_seriale = 'COM9'  # Cambia in base al tuo sistema
+porta_seriale = 'COM9'  # Cambia se necessario
 baudrate = 115200
 timeout = 1
 
-intestazioni = ['timestamp', 'vibrazione (m/s^2)', 'frequenza (Hz)', 'temperatura (°C)', 'umidità (%)']
-moduli = ['a', 'b', 'c']  # Moduli supportati
+# File per ogni tipo di misurazione
+file_temp_hum = 'temperatura_umidita.csv'
+file_vib_freq = 'vibrazioni.csv'
+file_allagamento = 'allagamento.csv'
+file_qualita_aria = 'qualita_aria.csv'
 
-# Crea un file CSV per ciascun modulo
-file_writer = {}
-for modulo in moduli:
-    filename = f'modulo_{modulo.upper()}.csv'
-    with open(filename, 'w', newline='') as f:
+# Intestazioni
+intestazioni_temp_hum = ['timestamp', 'modulo', 'temperatura (°C)', 'umidità (%)']
+intestazioni_vib_freq = ['timestamp', 'modulo', 'vibrazione (m/s^2)', 'frequenza (Hz)']
+intestazioni_allagamento = ['timestamp', 'modulo', 'stato_allagamento']
+intestazioni_aria = ['timestamp', 'modulo', 'qualita_aria']
+
+# Inizializza i file con intestazioni
+for file_name, headers in [
+    (file_temp_hum, intestazioni_temp_hum),
+    (file_vib_freq, intestazioni_vib_freq),
+    (file_allagamento, intestazioni_allagamento),
+    (file_qualita_aria, intestazioni_aria)
+]:
+    with open(file_name, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(intestazioni)
-    file_writer[modulo] = filename
+        writer.writerow(headers)
 
-# Buffer e variabili temporanee per ogni modulo
+# Variabili
 buffer = ''
-last_temp = {m: '' for m in moduli}
-last_hum = {m: '' for m in moduli}
+last_temp = {}
+last_hum = {}
 
 with serial.Serial(porta_seriale, baudrate, timeout=timeout) as ser:
     print("🟢 Lettura attiva...")
@@ -33,42 +44,52 @@ with serial.Serial(porta_seriale, baudrate, timeout=timeout) as ser:
             data = ser.read(ser.in_waiting or 1).decode('utf-8', errors='ignore')
             buffer += data
 
-            # Estrai pacchetti vibrazione/frequenza
+            # PACCHETTI VIBRAZIONE/FREQUENZA (es: aa1.23ab19.61)
             pattern_vib = re.compile(r'([a-z])a([0-9.\-]+)\1b([0-9.\-]+)')
-            matches_vib = pattern_vib.findall(buffer)
+            for modulo, vib, freq in pattern_vib.findall(buffer):
+                timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+                with open(file_vib_freq, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([timestamp, modulo.upper(), vib, freq])
+                print(f"[{timestamp}] Vibrazione | Modulo {modulo.upper()} | Vib: {vib} | Freq: {freq}")
 
-            for modulo, vib, freq in matches_vib:
-                if modulo in moduli:
-                    timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
-                    filename = file_writer[modulo]
-                    with open(filename, 'a', newline='') as f:
-                        writer = csv.writer(f)
-                        writer.writerow([timestamp, vib, freq, last_temp[modulo], last_hum[modulo]])
-                    print(f"[{timestamp}] Modulo {modulo.upper()} | Vib: {vib} | Freq: {freq} | Temp: {last_temp[modulo]} | Hum: {last_hum[modulo]}")
-
-            # Rimuovi pacchetti elaborati
             buffer = re.sub(r'[a-z]a[0-9.\-]+[a-z]b[0-9.\-]+', '', buffer)
 
-            # Estrai pacchetti temperatura/umidità
+            # PACCHETTI TEMPERATURA/UMIDITÀ (es: ac27.83ad45.20)
             pattern_env = re.compile(r'([a-z])c([0-9]+\.[0-9]+)\1d([0-9]+\.[0-9]+)')
-            matches_env = pattern_env.findall(buffer)
+            for modulo, temp, hum in pattern_env.findall(buffer):
+                timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+                with open(file_temp_hum, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([timestamp, modulo.upper(), temp, hum])
+                print(f"[{timestamp}] Ambiente | Modulo {modulo.upper()} | Temp: {temp} | Hum: {hum}")
 
-            for modulo, temp, hum in matches_env:
-                if modulo in moduli:
-                    last_temp[modulo] = temp
-                    last_hum[modulo] = hum
-                    timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
-                    filename = file_writer[modulo]
-                    with open(filename, 'a', newline='') as f:
-                        writer = csv.writer(f)
-                        writer.writerow([timestamp, '', '', temp, hum])
-                    print(f"[{timestamp}] Modulo {modulo.upper()} | Temp: {temp} | Hum: {hum}")
-
-            # Rimuovi i pacchetti ambiente elaborati
             buffer = re.sub(r'[a-z]c[0-9]+\.[0-9]+[a-z]d[0-9]+\.[0-9]+', '', buffer)
 
+            # TODO: Allagamento (es: ae0 -> nessun allagamento | ae1 -> allagamento)
+            pattern_allagamento = re.compile(r'([a-z])e([01])')
+            for modulo, stato in pattern_allagamento.findall(buffer):
+                timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+                with open(file_allagamento, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([timestamp, modulo.upper(), 'ALLAGAMENTO' if stato == '1' else 'OK'])
+                print(f"[{timestamp}] Allagamento | Modulo {modulo.upper()} | Stato: {'ALLAGAMENTO' if stato == '1' else 'OK'}")
+
+            buffer = re.sub(r'[a-z]e[01]', '', buffer)
+
+            # TODO: Qualità dell'aria (es: af12.5 -> valore qualità)
+            pattern_aria = re.compile(r'([a-z])f([0-9]+\.[0-9]+)')
+            for modulo, valore in pattern_aria.findall(buffer):
+                timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+                with open(file_qualita_aria, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([timestamp, modulo.upper(), valore])
+                print(f"[{timestamp}] Aria | Modulo {modulo.upper()} | Qualità: {valore}")
+
+            buffer = re.sub(r'[a-z]f[0-9]+\.[0-9]+', '', buffer)
+
         except KeyboardInterrupt:
-            print("\n🔴 Interrotto.")
+            print("\n🔴 Interrotto manualmente.")
             break
         except Exception as e:
-            print("❌ Errore:", e)
+            print(f"❌ Errore: {e}")
