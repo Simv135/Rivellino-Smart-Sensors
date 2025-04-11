@@ -8,67 +8,67 @@ porta_seriale = 'COM9'  # Cambia in base al tuo sistema
 baudrate = 115200
 timeout = 1
 
-intestazioni = ['timestamp', 'vibrazione (m/s^2)', 'frequenza (Hz)', "temperatura (°C)", 'umidità (%)']
-moduli = ['a', 'b', 'C']  # Moduli supportati
+intestazioni = ['timestamp', 'vibrazione (m/s^2)', 'frequenza (Hz)', 'temperatura (°C)', 'umidità (%)']
+moduli = ['a', 'b', 'c']  # Moduli supportati
 
 # Crea un file CSV per ciascun modulo
 file_writer = {}
-per modulo in moduli:
- nome file = f'modulo_{modulo.superiore()}. . . . .csv'
- con aperto(nome file, 'w', newline='') vieni f:
- scrittore = csv.scrittore(f)
- scrittore.writerow(intestazioni)
- file_writer[modulo] = nomefile
+for modulo in moduli:
+    filename = f'modulo_{modulo.upper()}.csv'
+    with open(filename, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(intestazioni)
+    file_writer[modulo] = filename
 
-# Buffer e variabili temporali per ogni modulo
+# Buffer e variabili temporanee per ogni modulo
 buffer = ''
-last_temp = {m: '' per m in moduli}
-last_hum = {m: '' per m in moduli}
+last_temp = {m: '' for m in moduli}
+last_hum = {m: '' for m in moduli}
 
-con serie.Serial (porta_serial, baudrate, timeout=timeout) come ser:
- stampa("🟢 Lettura attiva...")
+with serial.Serial(porta_seriale, baudrate, timeout=timeout) as ser:
+    print("🟢 Lettura attiva...")
 
- mentre Vero:
- prova:
- dati = ser.leggere(ser.in_attesa o 1).decodificare("utf-8", errori='ignora')
- buffer += data
+    while True:
+        try:
+            data = ser.read(ser.in_waiting or 1).decode('utf-8', errors='ignore')
+            buffer += data
 
- # Estrai pacchetti vibrazione/frequenza
- pattern_vib = re.compila(r'([az])a([0-9.\-]+)\1b([0-9.\-]+)')
- partite_vib = pattern_vib.trova tutto(buffer)
+            # Estrai pacchetti vibrazione/frequenza
+            pattern_vib = re.compile(r'([a-z])a([0-9.\-]+)\1b([0-9.\-]+)')
+            matches_vib = pattern_vib.findall(buffer)
 
- per modulo, vib, freq in partite_vib:
- se modulo in moduli:
- timestamp = tempo.strftime('%Y-%m-%d %H:%M:%S')
- nome file = file_writer[modulo]
- con aperto(nome file, 'a', newline='') come f:
- scrittore = csv.scrittore(f)
- scrittore.writerow([marca temporale, vib, freq, last_temp[modulo], ultimo_hum[modulo])
- stampa(f"[{timestamp}] Modulo {modulo.superiore()} | Vib: {vibrazione} | Freq: {freq} | Temp: {last_temp[modulo]} | Hum: {ultimo_hum[modulo]}")
+            for modulo, vib, freq in matches_vib:
+                if modulo in moduli:
+                    timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+                    filename = file_writer[modulo]
+                    with open(filename, 'a', newline='') as f:
+                        writer = csv.writer(f)
+                        writer.writerow([timestamp, vib, freq, last_temp[modulo], last_hum[modulo]])
+                    print(f"[{timestamp}] Modulo {modulo.upper()} | Vib: {vib} | Freq: {freq} | Temp: {last_temp[modulo]} | Hum: {last_hum[modulo]}")
 
- # Rimuovi pacchetti elaborati
- buffer = re.più(r'[az]a[0-9.\-]+[az]b[0-9.\-]+', '', tampone)
+            # Rimuovi pacchetti elaborati
+            buffer = re.sub(r'[a-z]a[0-9.\-]+[a-z]b[0-9.\-]+', '', buffer)
 
- # Estrai pacchetti temperatura/umidità
- pattern_env = re.compila(r'([az])c([0-9]+\.[0-9]+)\1d([0-9]+\.[0-9]+)')
- partite_env = pattern_env.trova tutto(buffer)
+            # Estrai pacchetti temperatura/umidità
+            pattern_env = re.compile(r'([a-z])c([0-9]+\.[0-9]+)\1d([0-9]+\.[0-9]+)')
+            matches_env = pattern_env.findall(buffer)
 
- per modulo, temp, hum in partite_env:
- se modulo in moduli:
- last_temp[modulo] = temp
- ultimo_hum[modulo] = ronzio
- timestamp = tempo.strftime('%Y-%m-%d %H:%M:%S')
- nome file = file_writer[modulo]
- con aperto(nome file, 'a', newline='') come f:
- scrittore = csv.scrittore(f)
- scrittore.writerow([timestamp, '', '', temp, ronzio])
- stampa(f"[{timestamp}] Modulo {modulo.superiore()} | Temp: {temp} | Hum: {canticchiare}")
+            for modulo, temp, hum in matches_env:
+                if modulo in moduli:
+                    last_temp[modulo] = temp
+                    last_hum[modulo] = hum
+                    timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+                    filename = file_writer[modulo]
+                    with open(filename, 'a', newline='') as f:
+                        writer = csv.writer(f)
+                        writer.writerow([timestamp, '', '', temp, hum])
+                    print(f"[{timestamp}] Modulo {modulo.upper()} | Temp: {temp} | Hum: {hum}")
 
- # Rimuovi i pacchetti ambiente elaborati
- buffer = re.più(r'[az]c[0-9]+\.[0-9]+[az]d[0-9]+\.[0-9]+', '', tampone)
+            # Rimuovi i pacchetti ambiente elaborati
+            buffer = re.sub(r'[a-z]c[0-9]+\.[0-9]+[a-z]d[0-9]+\.[0-9]+', '', buffer)
 
- eccetto Interruzione tastiera:
- stampa("\n🔴 Interrotto.")
- che non può essere
- eccetto Eccezione come e:
- stampa("❌ Errore:", e)
+        except KeyboardInterrupt:
+            print("\n🔴 Interrotto.")
+            break
+        except Exception as e:
+            print("❌ Errore:", e)
