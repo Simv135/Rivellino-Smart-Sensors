@@ -1,6 +1,11 @@
 # sensori-rivellino
 Gestione sensori rivellino degli invalidi.
 
+
+a → tirante
+b → galleria
+c → polveriera
+
 | ID   | Descrizione                | Tipo         | Modulo  |
 |------|----------------------------|--------------|---------|
 | a    | Batteria                   | %            | b       |
