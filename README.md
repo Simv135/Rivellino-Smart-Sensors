@@ -1,12 +1,13 @@
 # sensori-rivellino
 Gestione sensori rivellino degli invalidi.
 
+![rivellino-invalidi-torino-mappa-qp-140377164](https://github.com/user-attachments/assets/a61cf343-996a-4df3-b61e-e54a18bd27bc)
 
 - a → tirante
 - b → galleria
 - c → polveriera
 
-| ID   | Descrizione                | Tipo         | Modulo  |
+| ID   | Descrizione                | Valore       | Modulo  |
 |------|----------------------------|--------------|---------|
 | a    | Batteria                   | %            | b       |
 | b    | Batteria                   | %            | c       |
