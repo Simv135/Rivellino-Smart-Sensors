@@ -18,6 +18,6 @@ Gestione sensori rivellino degli invalidi.
 | m    | Allagamento                | True/False   | b       |
 
 Moduli:
-- a → tirante
-- b → galleria
-- c → polveriera
+- a → tirante (Temperatura e Umidità, Aria, Vibrazioni)
+- b → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
+- c → polveriera (Batterie, Temperatura e Umidità)
