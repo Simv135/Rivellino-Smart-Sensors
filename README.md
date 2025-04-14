@@ -1,7 +1,7 @@
 # sensori-rivellino
 Gestione sensori rivellino degli invalidi.
 
-| Code | Description                | Type         | Module  |
+| ID   | Descrizione                | Tipo         | Modulo  |
 |------|----------------------------|--------------|---------|
 | a    | Batteria                   | %            | b       |
 | b    | Batteria                   | %            | c       |
