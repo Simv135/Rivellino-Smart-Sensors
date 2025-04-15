@@ -40,68 +40,68 @@ void setup() {
   }
 }
 
-vuoto ciclo di ciclo() {
- currentMillis = millis();
+void loop() {
+  currentMillis = millis();
 
-  se (leggiAccelerometro()) {
+  if (readAccelerometer()) {
     // Filtro per stampare solo se:
     // - la vibrazione è cambiata significativamente
-    // - la frequenza è cambiata abbondanza da evitare ripetizioni inutili
+    // - la frequenza è cambiata abbastanza da evitare ripetizioni inutili
     // - deltaTime non è esattamente il minimo (50 ms), per evitare falsi 20 Hz
-    se (fabs(vibrazione - lastPrintedVibration) >= VIBRAZIONE_SOGLIA E
-        fabs(frequenzaVibrazione - lastPrintedFrequenza) >= 0,5 &&
- deltaTime!= VIBRATION_MIN_INTERVAL & &
- frequenzaVibrazione > 0,0 & frequenzaVibrazione < 100,0)
+    if (fabs(vibration - lastPrintedVibration) >= VIBRATION_THRESHOLD &&
+        fabs(frequencyVibration - lastPrintedFrequency) >= 0.5 &&
+        deltaTime != VIBRATION_MIN_INTERVAL &&
+        frequencyVibration > 0.0 && frequencyVibration < 100.0)
     {
       printVibrationData();
- lastPrintedVibration = vibrazione;
- lastPrintedFrequenza = frequenzaVibrazione;
+      lastPrintedVibration = vibration;
+      lastPrintedFrequency = frequencyVibration;
     }
   }
 
-  se (currentMillis - lastEnvLeggi >= ENV_INTERVAL) {
- lastEnvLeggi = currentMillis;
+  if (currentMillis - lastEnvRead >= ENV_INTERVAL) {
+    lastEnvRead = currentMillis;
     printEnvData();
   }
 }
 
-// Funzione per lettura accelerometro e calcio frequente
-bool leggiAccelerometro() {
-  se (IMU.accelerazioneDisponibile()) {
- IMU.leggiAccelerazione(x, y, z);
- vibrazione = sqrt(x * x + y * y + z * z);  //Accelerazione magnitudo
+// Funzione per lettura accelerometro e calcolo frequenza
+bool readAccelerometer() {
+  if (IMU.accelerationAvailable()) {
+    IMU.readAcceleration(x, y, z);
+    vibration = sqrt(x * x + y * y + z * z);  // Magnitudo accelerazione
 
-    se (primaLeggi || fabs(vibrazione - lastVibration) >= VIBRATION_THRESHOLD) {
- currentTime = millis();
- deltaTime = currentTime - lastTime;
+    if (firstRead || fabs(vibration - lastVibration) >= VIBRATION_THRESHOLD) {
+      currentTime = millis();
+      deltaTime = currentTime - lastTime;
 
-      se (!primaLeggi e deltaTime >= VIBRATION_MIN_INTERVAL) {
- frequenzaVibrazione = 1000,0 / deltaTime;
+      if (!firstRead && deltaTime >= VIBRATION_MIN_INTERVAL) {
+        frequencyVibration = 1000.0 / deltaTime;
       }
 
- lastTime = currentTime;
- lastVibration = vibrazione;
- primaLeggi = falso;
+      lastTime = currentTime;
+      lastVibration = vibration;
+      firstRead = false;
     }
   }
 
-  ritorno (!isnan(vibrazione) & frequenzaVibrazione > 0,0 & frequenzaVibrazione < 100,0);
+  return (!isnan(vibration) && frequencyVibration > 0.0 && frequencyVibration < 100.0);
 }
 
 // Stampa dati vibrazione
-vuoto printVibrationData() {
- Serial.stampa("k");  // Frequenza (Hz)
- Serial.stampa(frequenzaVibrazione, 2);
- Serial.stampa("l");  // Intensità vibrazione (m/s²)
- Serial.stampa(vibrazione, 2);
- Serial.stampa();
+void printVibrationData() {
+  Serial.print("k");  // Frequenza (Hz)
+  Serial.print(frequencyVibration, 2);
+  Serial.print("l");  // Intensità vibrazione (m/s²)
+  Serial.print(vibration, 2);
+  Serial.println();
 }
 
 // Stampa temperatura e umidità
-vuoto printEnvData() {
- Serial.stampa("c");  // Temperatura
- Serial.stampa(HS300x.readTemperature());
- Serial.stampa("f");  //Umidità
- Serial.stampa(HS300x.leggiUmidità());
- Serial.stampa();
+void printEnvData() {
+  Serial.print("c");  // Temperatura
+  Serial.print(HS300x.readTemperature());
+  Serial.print("f");  // Umidità
+  Serial.print(HS300x.readHumidity());
+  Serial.println();
 }
