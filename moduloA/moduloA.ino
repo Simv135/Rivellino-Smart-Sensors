@@ -1,80 +1,107 @@
 #include "Arduino_BMI270_BMM150.h"
 #include <Arduino_HS300x.h>
-#include <math.h>  // Per isnan()
+#include <math.h>  // Per fabs() e isnan()
 
-//MISURA VIBRAZIONI
+// Costanti di configurazione
+#define VIBRATION_THRESHOLD 0.03            // Soglia variazione accelerazione per stampare
+#define VIBRATION_MIN_INTERVAL 50           // Minimo tempo tra rilevazioni valide (ms)
+#define ENV_INTERVAL 5000                   // Intervallo lettura temperatura/umidità (ms)
+
+// Variabili vibrazione
 float x, y, z;
-float vibration;
-float lastVibration;
+float vibration = 0.0;
+float lastVibration = 0.0;
+float lastPrintedVibration = 0.0;
+float lastPrintedFrequency = 0.0;
 bool firstRead = true;
-const float soglia = 0.03;
-//MISURA FREQUENZA VIBRAZIONI
-unsigned long lastTime = 0;
-float frequency = 0.0;
-const unsigned long minInterval = 50;  // Minimo intervallo tra due rilevamenti per 20 Hz
 
-//TIMER TEMPERATURA E UMIDITA'
+// Variabili frequenza
+unsigned long lastTime = 0;
+unsigned long currentTime = 0;
+unsigned long deltaTime = 0;
+float frequencyVibration = 0.0;
+
+// Timer temperatura/umidità
 unsigned long lastEnvRead = 0;
-const unsigned long envInterval = 5000;  // misura temperatura ogni 5 secondi
+unsigned long currentMillis = 0;
 
 void setup() {
   Serial.begin(115200);
   while (!Serial);
 
   if (!IMU.begin()) {
+    Serial.println("Errore inizializzazione IMU!");
     while (1);
   }
-  HS300x.begin();  // Inizializza il sensore di temperatura/umidità
-}
 
-void loop() {
-  //LETTURA VIBRAZIONI
-  float vib = accelerometer();
-  if (!isnan(vib) && frequency != 0.00 && frequency != 20.00) {
-    Serial.print("aa");
-    Serial.print(vib, 2);           // m/s²
-    Serial.print("ab");
-    Serial.print(frequency, 2);     // Hz
-  }
-
-  //LETTURA TEMPERATURA
-  unsigned long currentMillis = millis();
-  if (currentMillis - lastEnvRead >= envInterval) {
-    lastEnvRead = currentMillis;
-
-    Serial.print("ac");
-    Serial.print(HS300x.readTemperature()); // °C
-    Serial.print("ad");
-    Serial.print(HS300x.readHumidity());    // %
-    Serial.println();
+  if (!HS300x.begin()) {
+    Serial.println("Errore inizializzazione sensore HS300x!");
+    while (1);
   }
 }
 
-//ACCELLEROMETRO MISURA VIBRAZIONI
-float accelerometer() {
-  if (IMU.accelerationAvailable()) {
-    IMU.readAcceleration(x, y, z);
-    
-    // Calcola la norma del vettore di accelerazione (m/s²)
-    vibration = sqrt(x * x + y * y + z * z);
+vuoto ciclo di ciclo() {
+ currentMillis = millis();
 
-    if (firstRead || abs(vibration - lastVibration) >= soglia) {
-      unsigned long currentTime = millis();
-      unsigned long deltaTime = currentTime - lastTime;
-      
-      if (!firstRead) {
-        if (deltaTime >= minInterval) {
-          frequency = 1000.0 / deltaTime;  // Hz
-        } else {
-          return NAN;
-        }
-      }
-
-      lastTime = currentTime;
-      lastVibration = vibration;
-      firstRead = false;
-      return vibration;
+  se (leggiAccelerometro()) {
+    // Filtro per stampare solo se:
+    // - la vibrazione è cambiata significativamente
+    // - la frequenza è cambiata abbondanza da evitare ripetizioni inutili
+    // - deltaTime non è esattamente il minimo (50 ms), per evitare falsi 20 Hz
+    se (fabs(vibrazione - lastPrintedVibration) >= VIBRAZIONE_SOGLIA E
+        fabs(frequenzaVibrazione - lastPrintedFrequenza) >= 0,5 &&
+ deltaTime!= VIBRATION_MIN_INTERVAL & &
+ frequenzaVibrazione > 0,0 & frequenzaVibrazione < 100,0)
+    {
+      printVibrationData();
+ lastPrintedVibration = vibrazione;
+ lastPrintedFrequenza = frequenzaVibrazione;
     }
   }
-  return NAN;
+
+  se (currentMillis - lastEnvLeggi >= ENV_INTERVAL) {
+ lastEnvLeggi = currentMillis;
+    printEnvData();
+  }
+}
+
+// Funzione per lettura accelerometro e calcio frequente
+bool leggiAccelerometro() {
+  se (IMU.accelerazioneDisponibile()) {
+ IMU.leggiAccelerazione(x, y, z);
+ vibrazione = sqrt(x * x + y * y + z * z);  //Accelerazione magnitudo
+
+    se (primaLeggi || fabs(vibrazione - lastVibration) >= VIBRATION_THRESHOLD) {
+ currentTime = millis();
+ deltaTime = currentTime - lastTime;
+
+      se (!primaLeggi e deltaTime >= VIBRATION_MIN_INTERVAL) {
+ frequenzaVibrazione = 1000,0 / deltaTime;
+      }
+
+ lastTime = currentTime;
+ lastVibration = vibrazione;
+ primaLeggi = falso;
+    }
+  }
+
+  ritorno (!isnan(vibrazione) & frequenzaVibrazione > 0,0 & frequenzaVibrazione < 100,0);
+}
+
+// Stampa dati vibrazione
+vuoto printVibrationData() {
+ Serial.stampa("k");  // Frequenza (Hz)
+ Serial.stampa(frequenzaVibrazione, 2);
+ Serial.stampa("l");  // Intensità vibrazione (m/s²)
+ Serial.stampa(vibrazione, 2);
+ Serial.stampa();
+}
+
+// Stampa temperatura e umidità
+vuoto printEnvData() {
+ Serial.stampa("c");  // Temperatura
+ Serial.stampa(HS300x.readTemperature());
+ Serial.stampa("f");  //Umidità
+ Serial.stampa(HS300x.leggiUmidità());
+ Serial.stampa();
 }
