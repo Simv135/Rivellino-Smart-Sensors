@@ -1,6 +1,11 @@
 # Sensori Rivellino
 Gestione sensori rivellino degli invalidi.
 
+Moduli:
+- a → tirante (Temperatura e Umidità, Aria, Vibrazioni)
+- b → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
+- c → polveriera (Batterie, Temperatura e Umidità)
+
 | ID   | Descrizione                | Valore       | Modulo  |
 |------|----------------------------|--------------|---------|
 | a    | Batteria                   | %            | b       |
@@ -17,7 +22,9 @@ Gestione sensori rivellino degli invalidi.
 | l    | Vibrazioni                 | m/s²         | a       |
 | m    | Allagamento                | True/False   | b       |
 
-Moduli:
-- a → tirante (Temperatura e Umidità, Aria, Vibrazioni)
-- b → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
-- c → polveriera (Batterie, Temperatura e Umidità)
+Files CSV → ID del dato corrispondente
+- allagamento.csv → m
+- aria.csv → i, j
+- batterie.csv → a, b
+- vibrazioni.csv → k, l
+- temperatura_umidita.csv → c, d, e, f, g, h
