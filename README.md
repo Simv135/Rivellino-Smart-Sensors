@@ -22,9 +22,10 @@ Moduli:
 | l    | Vibrazioni                 | m/s²         | a       |
 | m    | Allagamento                | True/False   | b       |
 
-Files CSV → ID del dato corrispondente
-- allagamento.csv → m
-- aria.csv → i, j
-- batterie.csv → a, b
-- vibrazioni.csv → k, l
-- temperatura_umidita.csv → c, d, e, f, g, h
+| File CSV                    | ID del dato corrispondente       |
+|----------------------------|----------------------------------|
+| allagamento.csv            | m                                |
+| aria.csv                   | i, j                             |
+| batterie.csv               | a, b                             |
+| vibrazioni.csv             | k, l                             |
+| temperatura_umidita.csv    | c, d, e, f, g, h                 |
