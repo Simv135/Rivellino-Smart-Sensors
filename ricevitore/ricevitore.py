@@ -35,7 +35,7 @@ id_map = {
 }
 
 def init_csv_files():
-    """Inizializza tutti i file CSV con le intestazioni corrette"""
+    #Inizializza tutti i file CSV con le intestazioni corrette
     csv_headers = {
         'env': ['timestamp', 'modulo', 'temperatura (°C)', 'umidità (%)'],
         'vib': ['timestamp', 'modulo', 'vibrazione (m/s²)', 'frequenza (Hz)'],
@@ -53,21 +53,20 @@ def init_csv_files():
             print(f"[INFO] Creato file {filename} con intestazioni")
 
 def parse_line(line):
-    """Estrae i dati dalla linea ricevuta dalla porta seriale"""
-    # Trova tutte le coppie ID-valore nella linea
+    #Estrae i dati dalla linea ricevuta dalla porta seriale
+    #Trova tutte le coppie ID-valore nella linea
     matches = re.findall(r'([a-z])([-+]?[0-9]*\.?[0-9]+)', line)
     return matches
 
 def write_to_csv(category, row):
-    """Scrive una riga di dati nel file CSV appropriato"""
+    #Scrive una riga di dati nel file CSV appropriato
     filename = CSV_FILES[category]
     with open(filename, 'a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(row)
-    print(f"[INFO] Dati salvati in {filename}: {row}")
 
 def find_working_port():
-    """Trova una porta seriale funzionante"""
+    #Trova una porta seriale funzionante
     try:
         ports = list(serial.tools.list_ports.comports())
         for port in ports:
@@ -76,7 +75,6 @@ def find_working_port():
                     ser.write(b'\n')
                     line = ser.readline().decode('utf-8', errors='ignore').strip()
                     if line:
-                        print(f"[INFO] Dispositivo trovato sulla porta {port.device}")
                         return port.device
             except (serial.serialutil.SerialException, UnicodeDecodeError):
                 continue
@@ -85,7 +83,7 @@ def find_working_port():
     return None
 
 def process_data(timestamp, pairs):
-    """Elabora i dati ricevuti e li scrive nei file CSV appropriati"""
+    #Elabora i dati ricevuti e li scrive nei file CSV appropriati
     # Dati temporanei per accoppiare sensori correlati
     temp_data = {
         'env': {},      # Per temperatura e umidità
@@ -162,54 +160,36 @@ def process_data(timestamp, pairs):
                 # La batteria è un dato singolo
                 write_to_csv('battery', [timestamp, modulo, value])
 
-def main():
-    """Funzione principale del programma"""
-    print("[INFO] Avvio sistema ricevitore...")
-    init_csv_files()
-    
-    connected = False
-    port = None
-    
-    while not connected:
-        port = find_working_port()
-        connected = bool(port)
+def readData(port):
+    with serial.Serial(port, BAUD_RATE, timeout=0.5) as ser:
+        print(f"[INFO] {port} - {BAUD_RATE} baud\n")
         
-        if not connected:
-            print("[ERRORE] Nessun dispositivo valido trovato. Riprovo...")
-            import time
-            time.sleep(2)  # Pausa prima di riprovare
-    
-    try:
-        with serial.Serial(port, BAUD_RATE, timeout=0.5) as ser:
-            print(f"[INFO] Lettura da {port} a {BAUD_RATE} baud...\n")
-            
-            while True:
-                try:
-                    raw_line = ser.readline().decode('utf-8', errors='ignore').strip()
-                except serial.SerialException as e:
-                    print(f"[ERRORE] Errore di comunicazione: {e}")
-                    break
+        while True:
+            raw_line = ser.readline().decode('utf-8', errors='ignore').strip()
+            if raw_line:
+                print(f"[DATI] {raw_line}")
+                timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                pairs = parse_line(raw_line)
                 
-                if raw_line:
-                    print(f"[DATI] {raw_line}")
-                    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                    pairs = parse_line(raw_line)
-                    
-                    if pairs:
-                        process_data(timestamp, pairs)
+                if pairs:
+                    process_data(timestamp, pairs)
+
+print("[INFO] Avvio sistema ricevitore...")
+
+def main():
+    init_csv_files()
+
+    port = find_working_port()
     
-    except KeyboardInterrupt:
-        print("\n[INFO] Interrotto dall'utente")
-    except Exception as e:
-        print(f"[ERRORE] Errore imprevisto: {e}")
+    if port: 
+        readData(port)
 
 if __name__ == '__main__':
     while True:
         try:
             main()
+        except serial.SerialException as e:
+            print(f"[ERRORE] Errore di comunicazione")
         except KeyboardInterrupt:
             print("[INFO] Programma terminato")
             break
-        except Exception as e:
-            print(f"[ERRORE] Errore nel main: {e}")
-            print("[INFO] Riavvio del programma...")
