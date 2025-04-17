@@ -61,7 +61,7 @@ void loop() {
 
   if (currentMillis - lastEnvRead >= ENV_INTERVAL) {
     lastEnvRead = currentMillis;
-    printEnvData();
+    printTempHumData();
   }
 }
 
@@ -93,15 +93,13 @@ void printVibrationData() {
   Serial.print("k");  // Frequenza (Hz)
   Serial.print(frequencyVibration, 2);
   Serial.print("l");  // Intensità vibrazione (m/s²)
-  Serial.print(vibration, 2);
-  Serial.println();
+  Serial.println(vibration, 2);
 }
 
 // Stampa temperatura e umidità
-void printEnvData() {
+void printTempHumData() {
   Serial.print("c");  // Temperatura
   Serial.print(HS300x.readTemperature());
   Serial.print("f");  // Umidità
-  Serial.print(HS300x.readHumidity());
-  Serial.println();
+  Serial.println(HS300x.readHumidity());
 }
