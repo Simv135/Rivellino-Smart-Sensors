@@ -12,6 +12,10 @@ DHT dht11(DHT11_DATA_PIN, DHT11);
 // Istanza ADS1115
 Adafruit_ADS1X15 ads;
 
+// Variabili Temperatura e umidità
+float temp;
+float hum;
+
 // Costante R0 per NO2
 float R0_NO2 = 20.0;
 
@@ -39,39 +43,46 @@ void loop() {
   if (currentMillis - previousMillis >= ENV_INTERVAL) {
     previousMillis = currentMillis;
 
-    // Accendi DHT11
-    digitalWrite(DHT11_VCC_PIN, HIGH);
-    delay(2000); // Attendi stabilizzazione
-    dht11.begin();
-
-    // Leggi dati ambiente
-    float temp = dht11.readTemperature();
-    float hum = dht11.readHumidity();
-
-    // Spegni DHT11
-    digitalWrite(DHT11_VCC_PIN, LOW);
-
-    // Leggi qualità dell'aria
     readAirQuality();
 
-    // Stampa risultati
-    if (isnan(temp) || isnan(hum)) {
-      Serial.println("Errore lettura DHT11");
-    } else {
-      Serial.print("d"); Serial.print(temp);
-      Serial.print("g"); Serial.println(hum);
-    }
+    readTempHum();
 
-    Serial.print("j");
-    Serial.println(ppm_NO2);
+    printTempHumData();
+
+    printAirData();
   }
 }
 
 void readAirQuality() {
   no2_raw = ads.readADC_SingleEnded(1);
   no2_voltage = no2_raw * 6.144 / 32768.0;
-
   R_s_NO2 = (5.0 - no2_voltage) / no2_voltage * R0_NO2;
-
   ppm_NO2 = pow((R_s_NO2 / R0_NO2), 1.007) * 6.855;
+}
+
+void readTempHum(){
+  // Accendi DHT11
+  digitalWrite(DHT11_VCC_PIN, HIGH);
+  delay(2000); // Attendi stabilizzazione
+  dht11.begin();
+
+  // Leggi dati ambiente
+  temp = dht11.readTemperature();
+  hum = dht11.readHumidity();
+
+  // Spegni DHT11
+  digitalWrite(DHT11_VCC_PIN, LOW);
+}
+
+// Stampa temperatura e umidità
+void printTempHumData() {
+  Serial.print("c");  // Temperatura
+  Serial.print(temp);
+  Serial.print("f");  // Umidità
+  Serial.println(hum);
+}
+
+void printAirData(){
+  Serial.print("j");
+  Serial.println(ppm_NO2);
 }
