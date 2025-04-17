@@ -13,20 +13,20 @@ CSV_FILES = {
 
 # Mappatura completa degli ID dei sensori con relative informazioni
 ID_MAP = {
-    # ID: (nome, modulo, categoria_file, unità_misura)
-    'a': ('batteria', 'b', 'battery', '%'),
-    'b': ('batteria', 'c', 'battery', '%'),
-    'c': ('temperatura', 'a', 'env', '°C'),
-    'd': ('temperatura', 'b', 'env', '°C'),
-    'e': ('temperatura', 'c', 'env', '°C'),
-    'f': ('umidità', 'a', 'env', '%'),
-    'g': ('umidità', 'b', 'env', '%'),
-    'h': ('umidità', 'c', 'env', '%'),
-    'i': ('CO', 'a', 'air', 'ppm'),
-    'j': ('NO2', 'b', 'air', 'ppm'),
-    'k': ('frequenza', 'a', 'vib', 'Hz'),
-    'l': ('vibrazione', 'a', 'vib', 'm/s²'),
-    'm': ('allagamento', 'b', 'flood', 'True/False')
+    # ID: (nome, modulo, categoria_file)
+    'a': ('batteria', 'b', 'battery'),
+    'b': ('batteria', 'c', 'battery'),
+    'c': ('temperatura', 'a', 'env'),
+    'd': ('temperatura', 'b', 'env'),
+    'e': ('temperatura', 'c', 'env'),
+    'f': ('umidità', 'a', 'env'),
+    'g': ('umidità', 'b', 'env'),
+    'h': ('umidità', 'c', 'env'),
+    'i': ('CO', 'a', 'air'),
+    'j': ('NO2', 'b', 'air'),
+    'k': ('frequenza', 'a', 'vib'),
+    'l': ('vibrazione', 'a', 'vib'),
+    'm': ('allagamento', 'b', 'flood')
 }
 
 # Inizializza tutti i file CSV con le intestazioni corrette
