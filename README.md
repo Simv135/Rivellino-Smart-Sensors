@@ -20,7 +20,7 @@ Moduli:
 | j    | Aria (NO2)                 | ppm          | b       |
 | k    | Vibrazioni                 | Hz           | a       |
 | l    | Vibrazioni                 | m/s²         | a       |
-| m    | Allagamento                | True/False   | b       |
+| m    | Allagamento                | 0 / 1        | b       |
 
 | File CSV                    | ID del dato corrispondente       |
 |----------------------------|----------------------------------|
