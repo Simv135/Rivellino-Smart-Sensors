@@ -55,7 +55,7 @@ def process_data(timestamp, pairs):
         if code not in ID_MAP:
             continue
             
-        sensor_name, modulo, category, _ = ID_MAP[code]
+        sensor_name, modulo, category = ID_MAP[code]
         
         # Inizializza le strutture dati necessarie
         if category not in temp_data:
@@ -66,40 +66,43 @@ def process_data(timestamp, pairs):
         # Memorizza il valore con il nome del sensore come chiave
         temp_data[category][modulo][sensor_name] = value
     
-    # Seconda elaborazione: verifica quali set di dati sono completi e possono essere scritti
-    # Per ogni categoria nel dizionario temp_data
+    # Seconda elaborazione: verifica quali set di dati sono completi
     for category in list(temp_data.keys()):
-        # Per ogni modulo in questa categoria
         for modulo in list(temp_data[category].keys()):
-            # Determina quali parametri sono attesi per questa categoria
-            expected_params = get_expected_params(category)
+            # Ottieni i parametri attesi dalle intestazioni CSV
+            csv_headers = CSV_HEADERS[category][2:]  # Escludi timestamp e modulo
             
-            # Se abbiamo tutti i parametri attesi, scriviamo nel CSV
-            if all(param in temp_data[category][modulo] for param in expected_params):
-                # Prepara la riga da scrivere
-                row = [timestamp, modulo] + [temp_data[category][modulo][param] for param in expected_params]
+            # Mappa i nomi dei sensori (in ID_MAP) ai nomi delle colonne CSV (in CSV_HEADERS)
+            sensor_to_csv_map = {}
+            for code, (name, mod, cat) in ID_MAP.items():
+                if cat == category:
+                    # Trova l'intestazione CSV corrispondente
+                    for header in csv_headers:
+                        # Controllo semplice: il nome del sensore è contenuto nell'intestazione CSV?
+                        if name in header:
+                            sensor_to_csv_map[name] = header
+                            break
+            
+            # Verifica se sono presenti tutti i sensori necessari per questa categoria
+            collected_data = temp_data[category][modulo]
+            
+            # Se abbiamo tutti i sensori necessari per questa categoria
+            if all(sensor in collected_data for sensor in sensor_to_csv_map.keys()):
+                # Prepara la riga da scrivere nel CSV
+                row = [timestamp, modulo]
+                
+                # Aggiungi i valori nell'ordine corretto delle intestazioni CSV
+                for header in csv_headers:
+                    # Trova il sensore corrispondente a questa intestazione
+                    for sensor_name, csv_header in sensor_to_csv_map.items():
+                        if csv_header == header:
+                            row.append(collected_data[sensor_name])
+                            break
+                
+                # Scrivi la riga nel CSV
                 write_to_csv(category, row)
                 # Rimuovi i dati già scritti
                 del temp_data[category][modulo]
-
-def get_expected_params(category):
-    """
-    Determina i parametri attesi per una categoria basandosi sulle intestazioni CSV.
-    Restituisce una lista di nomi di parametri.
-    """
-    # Ottieni le intestazioni per questa categoria
-    headers = CSV_HEADERS[category]
-    
-    # Le prime due colonne sono sempre 'timestamp' e 'modulo'
-    # Le colonne successive sono i parametri effettivi
-    expected_params = []
-    for header in headers[2:]:
-        # Estrai il nome del parametro dalla colonna dell'intestazione
-        # (rimuovi l'unità di misura tra parentesi, se presente)
-        param_name = header.split(' (')[0]
-        expected_params.append(param_name)
-    
-    return expected_params
 
 def readData(port):
     with serial.Serial(port, BAUD_RATE, timeout=0.5) as ser:
