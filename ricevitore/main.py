@@ -47,60 +47,59 @@ def find_working_port():
     return None
 
 def process_data(timestamp, pairs):
-    temp_data = {
-        'env': {},   # {modulo: {'temp': val, 'hum': val}}
-        'vib': {},   # {'freq': val, 'intensity': val}
-        'air': {}    # {modulo: {'CO': val, 'NO2': val}}
-    }
-
+    # Struttura temporanea per raccogliere i dati
+    temp_data = {}
+    
+    # Prima elaborazione: raccogli tutti i dati di questa iterazione
     for code, value in pairs:
         if code not in ID_MAP:
             continue
+            
+        sensor_name, modulo, category, _ = ID_MAP[code]
+        
+        # Inizializza le strutture dati necessarie
+        if category not in temp_data:
+            temp_data[category] = {}
+        if modulo not in temp_data[category]:
+            temp_data[category][modulo] = {}
+            
+        # Memorizza il valore con il nome del sensore come chiave
+        temp_data[category][modulo][sensor_name] = value
+    
+    # Seconda elaborazione: verifica quali set di dati sono completi e possono essere scritti
+    # Per ogni categoria nel dizionario temp_data
+    for category in list(temp_data.keys()):
+        # Per ogni modulo in questa categoria
+        for modulo in list(temp_data[category].keys()):
+            # Determina quali parametri sono attesi per questa categoria
+            expected_params = get_expected_params(category)
+            
+            # Se abbiamo tutti i parametri attesi, scriviamo nel CSV
+            if all(param in temp_data[category][modulo] for param in expected_params):
+                # Prepara la riga da scrivere
+                row = [timestamp, modulo] + [temp_data[category][modulo][param] for param in expected_params]
+                write_to_csv(category, row)
+                # Rimuovi i dati già scritti
+                del temp_data[category][modulo]
 
-        name, modulo, category, _ = ID_MAP[code]
-        value = float(value)
-
-        if category == 'env':
-            if modulo not in temp_data['env']:
-                temp_data['env'][modulo] = {}
-
-            if code in ['c', 'd', 'e']:  # temperatura
-                temp_data['env'][modulo]['temp'] = value
-            elif code in ['f', 'g', 'h']:  # umidità
-                temp_data['env'][modulo]['hum'] = value
-
-            # Scrive se entrambi i dati sono presenti
-            data = temp_data['env'][modulo]
-            if 'temp' in data and 'hum' in data:
-                write_to_csv('env', [timestamp, modulo, data['temp'], data['hum']])
-                del temp_data['env'][modulo]
-
-        elif category == 'air':
-            if modulo not in temp_data['air']:
-                temp_data['air'][modulo] = {}
-
-            if code == 'i':  # CO
-                temp_data['air'][modulo]['CO'] = value
-            elif code == 'j':  # NO2
-                temp_data['air'][modulo]['NO2'] = value
-
-            data = temp_data['air'][modulo]
-            if 'CO' in data and 'NO2' in data:
-                write_to_csv('air', [timestamp, modulo, data['CO'], data['NO2']])
-                del temp_data['air'][modulo]
-
-        elif category == 'vib':
-            if code == 'k':  # frequenza
-                temp_data['vib']['freq'] = value
-            elif code == 'l':  # intensità
-                temp_data['vib']['intensity'] = value
-
-            if 'freq' in temp_data['vib'] and 'intensity' in temp_data['vib']:
-                write_to_csv('vib', [timestamp, modulo, temp_data['vib']['intensity'], temp_data['vib']['freq']])
-                temp_data['vib'].clear()
-
-        elif category in ['flood', 'battery']:
-            write_to_csv(category, [timestamp, modulo, value])
+def get_expected_params(category):
+    """
+    Determina i parametri attesi per una categoria basandosi sulle intestazioni CSV.
+    Restituisce una lista di nomi di parametri.
+    """
+    # Ottieni le intestazioni per questa categoria
+    headers = CSV_HEADERS[category]
+    
+    # Le prime due colonne sono sempre 'timestamp' e 'modulo'
+    # Le colonne successive sono i parametri effettivi
+    expected_params = []
+    for header in headers[2:]:
+        # Estrai il nome del parametro dalla colonna dell'intestazione
+        # (rimuovi l'unità di misura tra parentesi, se presente)
+        param_name = header.split(' (')[0]
+        expected_params.append(param_name)
+    
+    return expected_params
 
 def readData(port):
     with serial.Serial(port, BAUD_RATE, timeout=0.5) as ser:
