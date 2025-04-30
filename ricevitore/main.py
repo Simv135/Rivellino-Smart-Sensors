@@ -8,9 +8,11 @@ import os
 from datetime import datetime
 
 #importiamo il file di configurazione config.py
-from config import BAUD_RATE, CSV_FILES, ID_MAP, CSV_HEADERS, LOG_MESSAGES
+from config import BAUD_RATE, CSV_FILES, ID_MAP, CSV_HEADERS, CSV_PATH, LOG_MESSAGES
 
 def init_csv_files():
+    if not os.path.exists(CSV_PATH):
+        os.mkdir(CSV_PATH)
     for category, filename in CSV_FILES.items():
         # Crea il file solo se non esiste
         if not os.path.exists(filename) or os.path.getsize(filename) == 0:
