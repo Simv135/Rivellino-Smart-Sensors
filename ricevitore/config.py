@@ -4,11 +4,11 @@ BAUD_RATE = 115200
 
 # Definizione costante dei file CSV
 CSV_FILES = {
-    'env': 'temperatura_umidita.csv',
-    'vib': 'vibrazioni.csv',
-    'flood': 'allagamento.csv',
-    'air': 'aria.csv',
-    'battery': 'batterie.csv'
+    'env': 'DatiSensori/temperatura_umidita.csv',
+    'vib': 'DatiSensori/vibrazioni.csv',
+    'flood': 'DatiSensori/allagamento.csv',
+    'air': 'DatiSensori/aria.csv',
+    'battery': 'DatiSensori/batterie.csv'
 }
 
 # Mappatura completa degli ID dei sensori con relative informazioni
