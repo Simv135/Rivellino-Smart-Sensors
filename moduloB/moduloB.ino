@@ -34,7 +34,7 @@ void setup() {
   pinMode(DHT11_VCC_PIN, OUTPUT);
   digitalWrite(DHT11_VCC_PIN, LOW); // Tieni spento all'avvio
 
-  ads.begin(); // Inizializza ADS una sola volta
+  ads.begin(); // Inizializza ADS
 }
 
 void loop() {
@@ -53,6 +53,7 @@ void loop() {
   }
 }
 
+//Lettura Qualità dell'Aria (NO2)
 void readAirQuality() {
   no2_raw = ads.readADC_SingleEnded(1);
   no2_voltage = no2_raw * 6.144 / 32768.0;
@@ -60,28 +61,30 @@ void readAirQuality() {
   ppm_NO2 = pow((R_s_NO2 / R0_NO2), 1.007) * 6.855;
 }
 
+//Lettura Temperatura e Umidità
 void readTempHum(){
-  // Accendi DHT11
+  //Accendi DHT11
   digitalWrite(DHT11_VCC_PIN, HIGH);
-  delay(2000); // Attendi stabilizzazione
+  delay(2000);
   dht11.begin();
 
-  // Leggi dati ambiente
+  //Lettura dei dati dai sensori di Temperatura e Umidità
   temp = dht11.readTemperature();
   hum = dht11.readHumidity();
 
-  // Spegni DHT11
+  //Spegni DHT11
   digitalWrite(DHT11_VCC_PIN, LOW);
 }
 
-// Stampa temperatura e umidità
+// Stampa Temperatura e Umidità
 void printTempHumData() {
-  Serial.print("c");  // Temperatura
+  Serial.print("c");
   Serial.print(temp);
-  Serial.print("f");  // Umidità
+  Serial.print("f");
   Serial.println(hum);
 }
 
+// Stampa Qualità dell'Aria (NO2)
 void printAirData(){
   Serial.print("j");
   Serial.println(ppm_NO2);
