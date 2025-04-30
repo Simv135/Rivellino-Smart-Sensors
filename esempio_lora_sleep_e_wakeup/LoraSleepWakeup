@@ -1,0 +1,169 @@
+#include <LowPower.h>
+#include <SPI.h>
+#include <LoRa.h>
+#include "Wire.h"
+#include "SHT31.h"
+
+// LoRa pins for Pro Mini
+#define ss 10
+#define rst 9
+#define dio0 2
+
+// Define the analog pin for the ultrasonic sensor
+const int sensorPin = A0;
+#define RAIN_SENSOR_PIN 3  // Use a digital pin for rain sensor
+
+// Node addresses
+byte MasterNode = 0xFF;
+byte IntegratedNode = 0xCC;
+
+String outgoing;
+byte msgCount = 0;
+String incoming = "";
+
+// SHT31 sensor
+SHT31 sht(0x44);  // Initialize the SHT31 sensor object with the I2C address 0x44
+
+// Variable to store the ultrasonic sensor reading
+int sensorValue;
+float distance;
+volatile bool rainDetected = false;  // Flag to indicate rain detection
+unsigned long lastInterruptTime = 0; // Time of the last interrupt
+
+// Function declarations
+void rainISR();
+void sendMessage(String outgoing, byte MasterNode, byte IntegratedNode);
+void goToSleep();
+void wakeAndSend();
+
+void setup() {
+  // Set up rain sensor pin as input with pullup resistor enabled
+  pinMode(RAIN_SENSOR_PIN, INPUT_PULLUP);
+
+  Serial.begin(9600);
+  while (!Serial);
+
+  Serial.println("LoRa Integrated Node");
+
+  LoRa.setPins(ss, rst, dio0);
+
+  if (!LoRa.begin(915.6E6)) {
+    Serial.println("Starting LoRa failed!");
+    while (1);
+  }
+
+  Wire.begin();
+  Wire.setClock(100000);
+
+  if (!sht.begin()) {
+    Serial.println("Failed to communicate with SHT31 sensor. Check wiring or I2C address.");
+    while (1); // Halt the program
+  }
+
+  // Send a message to the master to indicate that this node is connected
+  sendMessage("Integrated Node Connected", MasterNode, IntegratedNode);
+  Serial.println("LoRa connected to master.");
+}
+
+void loop() {
+  goToSleep();
+
+  // Re-initialize Serial communication after wake up
+  Serial.begin(9600);
+  while (!Serial);
+  Serial.println("Rain detected, waking up...");
+
+  Send();  // Handle sensor reading and data sending
+
+  // Wait for 10 seconds before going back to sleep
+  delay(10000);
+
+}
+
+void Send() {
+  // Add a small delay to allow sensors to stabilize
+  delay(500);  // 500ms delay
+
+  // Read the value from the ultrasonic sensor
+  sensorValue = analogRead(sensorPin);
+
+  // Convert the analog value to distance (assuming a linear relation, adjust as needed)
+  float voltage = sensorValue * (3.3 / 1023.0);
+  distance = voltage / 0.003; // Example conversion, modify according to sensor datasheet
+
+  // Read temperature and humidity from SHT31 sensor
+  sht.read();
+  float temperature = sht.getTemperature();
+  float humidity = sht.getHumidity();
+
+  // Print the readings to Serial for debugging
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.print(" cm, Temperature: ");
+  Serial.print(temperature);
+  Serial.print(" C, Humidity: ");
+  Serial.println(humidity);
+
+  // Prepare and send the message
+  String message = String(distance) + "," + String(temperature) + "," + String(humidity);
+  sendMessage(message, MasterNode, IntegratedNode);
+
+  // Wait for 100ms to ensure transmission is complete
+  delay(100);
+}
+
+void goToSleep() {
+  Serial.println("Going to sleep...");
+  Serial.flush();  // Ensure the Serial buffer is fully transmitted
+  Serial.end();  // Disable Serial to save power
+  delay(50);  // Add a short delay to allow time for the message to be sent
+
+  // Re-attach the interrupt to ensure it will trigger after sleep
+  attachInterrupt(digitalPinToInterrupt(RAIN_SENSOR_PIN), rainISR, FALLING);
+
+  // Enter power-down mode, waiting for an external interrupt to wake up
+  LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF, TIMER2_OFF);
+  detachInterrupt(digitalPinToInterrupt(RAIN_SENSOR_PIN));
+}
+
+void rainISR() {
+
+}
+
+void onReceive(int packetSize) {
+  if (packetSize == 0) return;          // if there's no packet, return
+
+  // Read packet header bytes:
+  int recipient = LoRa.read();          // recipient address
+  byte sender = LoRa.read();            // sender address
+  byte incomingMsgId = LoRa.read();     // incoming msg ID
+  byte incomingLength = LoRa.read();    // incoming msg length
+
+  String incoming = "";
+
+  while (LoRa.available()) {
+    incoming += (char)LoRa.read();
+  }
+
+  if (incomingLength != incoming.length()) {   // check length for error
+    return;                             // skip rest of function
+  }
+
+  // If the recipient isn't this device or broadcast, skip rest of function
+  if (recipient != IntegratedNode && recipient != MasterNode) {
+    return;
+  }
+
+  Serial.println(incoming);
+}
+
+void sendMessage(String outgoing, byte MasterNode, byte IntegratedNode) {
+  LoRa.beginPacket();
+  LoRa.write(MasterNode);               // Add destination address
+  LoRa.write(IntegratedNode);           // Add sender address
+  LoRa.write(msgCount);                 // Add message ID
+  LoRa.write(outgoing.length());        // Add payload length
+  LoRa.print(outgoing);                 // Add payload
+  LoRa.endPacket();
+  msgCount++;
+}
