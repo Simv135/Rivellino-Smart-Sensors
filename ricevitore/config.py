@@ -43,8 +43,10 @@ CSV_HEADERS = {
     'battery': ('timestamp', 'modulo', 'batteria (%)')
 }
 
-# Messaggi di log
+# Messaggi di LOG
 SHOW_LOG = True
+
+LOG_FILE = 'logfile.log'
 
 LOG_MESSAGES = {
     'init_start': '[INFO] Avvio ricevitore...',
@@ -55,3 +57,5 @@ LOG_MESSAGES = {
     'comm_error': '[ERROR] Errore di comunicazione',
     'terminated': '[INFO] Programma terminato'
 }
+
+
