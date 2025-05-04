@@ -42,12 +42,14 @@ CSV_HEADERS = {
 }
 
 # Messaggi di log
+SHOW_LOG = True
+
 LOG_MESSAGES = {
-    'init_start': '[INFO] Avvio sistema ricevitore...',
-    'file_created': '[INFO] Creato file "{filename}" con intestazioni',
-    'dir_created': f'[INFO] Cartella "{CSV_PATH}" creata',
-    'port_found': '[INFO] {port} - {baud} baud',
-    'dir_error': f'[ERROR] Cartella "{CSV_PATH}" non trovata',
+    'init_start': '[INFO] Avvio ricevitore...',
+    'file_created': '[INFO] Creato file con intestazioni',
+    'dir_created': f'[INFO] Cartella {CSV_PATH} creata',
+    'port_found': '[INFO] Connesso alla porta seriale',
+    'dir_error': f'[ERROR] Cartella {CSV_PATH} non trovata',
     'comm_error': '[ERROR] Errore di comunicazione',
     'terminated': '[INFO] Programma terminato'
 }

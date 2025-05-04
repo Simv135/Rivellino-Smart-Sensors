@@ -3,25 +3,34 @@ import re, csv, os, logging
 from datetime import datetime
 
 # Importiamo il file di configurazione config.py
-from config import BAUD_RATE, CSV_FILES, ID_MAP, CSV_HEADERS, CSV_PATH, LOG_MESSAGES
+from config import BAUD_RATE, CSV_FILES, ID_MAP, CSV_HEADERS, CSV_PATH
+from config import LOG_MESSAGES, SHOW_LOG
 
 # Configurazione del logging
-logging.basicConfig(
-    filename='logfile.log',
-    format='%(asctime)s - %(message)s',
-    level=logging.INFO
-)
+def printLOG(message_key):
+    logging.basicConfig(
+        filename='logfile.log',
+        format='%(asctime)s - %(message)s',
+        level=logging.INFO
+    )
+    if message_key in LOG_MESSAGES:
+        logging.info(LOG_MESSAGES[message_key])
+        if SHOW_LOG:
+            print(LOG_MESSAGES[message_key])
+    else:
+        if SHOW_LOG:
+            print(message_key)
 
 def init_csv_files():
     if not os.path.exists(CSV_PATH):
         os.mkdir(CSV_PATH)
-        logging.info(LOG_MESSAGES['dir_created'])
+        printLOG('dir_created')
     for category, filename in CSV_FILES.items():
         if not os.path.exists(filename) or os.path.getsize(filename) == 0:
             with open(filename, 'w', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerow(CSV_HEADERS[category])
-            logging.info(LOG_MESSAGES['file_created'].format(filename=filename))
+            printLOG('file_created')
 
 def parse_line(line):
     matches = re.findall(r'([a-z])([-+]?[0-9]*\.?[0-9]+)', line)
@@ -84,13 +93,14 @@ def process_data(timestamp, pairs):
 
             write_to_csv(category, row)
 
-
 def readData(port):
     with serial.Serial(port, BAUD_RATE, timeout=0.5) as ser:
-        logging.info(LOG_MESSAGES['port_found'].format(port=port, baud=BAUD_RATE))
+        printLOG('port_found')
+        printLOG(f'[INFO] {port} - {BAUD_RATE}')
         while True:
             raw_line = ser.readline().decode('utf-8', errors='ignore').strip()
             if raw_line:
+                printLOG(f'[DATA] {raw_line}')
                 timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 pairs = parse_line(raw_line)
                 if pairs:
@@ -103,17 +113,17 @@ def main():
         readData(port)
 
 if __name__ == '__main__':
-    logging.info(LOG_MESSAGES['init_start'])
+    printLOG('init_start')
     while True:
         try:
             main()
         except serial.SerialException:
-            logging.info(LOG_MESSAGES['comm_error'])
+            printLOG('comm_error')
         except FileNotFoundError:
-            logging.info(LOG_MESSAGES['dir_error'])
+            printLOG('dir_error')
         except KeyboardInterrupt:
-            logging.info(LOG_MESSAGES['terminated'])
+            printLOG('terminated')
             logging.shutdown()
             break
         except Exception as e:
-            logging.info(e)
+            printLOG(e)
