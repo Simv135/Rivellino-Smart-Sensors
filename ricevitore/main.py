@@ -1,3 +1,5 @@
+# main.py
+
 ### Librerie necessarie ###
 #   la libreria serial è necessario installarla con il comando: "pip install pyserial"
 import serial, serial.tools.list_ports
@@ -59,7 +61,7 @@ def write_to_csv(category, row):
     if not os.path.exists(CSV_PATH):
         os.mkdir(CSV_PATH)
         printLOG('dir_created')
-    filename = CSV_FILES[category]
+    filename = CSV_PATH + "/" + CSV_FILES[category]
     if not os.path.exists(filename) or os.path.getsize(filename) == 0:
         with open(filename, 'w', newline='') as f:
             writer = csv.writer(f)

@@ -9,16 +9,16 @@ CSV_PATH = "DatiSensori"
 
 # Nome dei file CSV
 CSV_FILES = {
-    'env': f'{CSV_PATH}/temperatura_umidita.csv',
-    'vib': f'{CSV_PATH}/vibrazioni.csv',
-    'flood': f'{CSV_PATH}/allagamento.csv',
-    'air': f'{CSV_PATH}/aria.csv',
-    'battery': f'{CSV_PATH}/batterie.csv'
+    'env': 'temperatura_umidita.csv',
+    'vib': 'vibrazioni.csv',
+    'flood': 'allagamento.csv',
+    'air': 'aria.csv',
+    'battery': 'batterie.csv'
 }
 
-# Mappatura completa degli ID dei sensori con relative informazioni
+# Mappatura degli ID dei sensori con le relative informazioni
+#    ID: (nome, modulo, categoria_file)
 ID_MAP = {
-    # ID: (nome, modulo, categoria_file)
     'a': ('batteria', 'b', 'battery'),
     'b': ('batteria', 'c', 'battery'),
     'c': ('temperatura', 'a', 'env'),
@@ -50,12 +50,12 @@ LOG_FILE = 'logfile.log'
 
 LOG_MESSAGES = {
     'init_start': '[INFO] Avvio ricevitore...',
-    'file_created': '[INFO] Creato file con intestazioni',
+    'file_created': '[INFO] File CSV creato',
     'dir_created': f'[INFO] Cartella {CSV_PATH} creata',
     'port_found': '[INFO] Connesso alla porta seriale',
     'dir_error': f'[ERROR] Cartella {CSV_PATH} non trovata',
     'comm_error': '[ERROR] Errore di comunicazione',
-    'terminated': '[INFO] Programma terminato'
+    'terminated': "[INFO] Programma terminato dall'utente"
 }
 
 
