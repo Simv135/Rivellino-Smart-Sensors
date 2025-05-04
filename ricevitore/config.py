@@ -1,5 +1,7 @@
 # config.py
 
+# Connessione
+PORT = None
 BAUD_RATE = 115200
 
 # Percorso file CSV

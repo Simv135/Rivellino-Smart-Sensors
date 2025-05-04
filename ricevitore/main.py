@@ -3,7 +3,7 @@ import re, csv, os, logging
 from datetime import datetime
 
 # Importiamo il file di configurazione config.py
-from config import BAUD_RATE, CSV_FILES, ID_MAP, CSV_HEADERS, CSV_PATH
+from config import BAUD_RATE, CSV_FILES, ID_MAP, CSV_HEADERS, CSV_PATH, PORT
 from config import LOG_MESSAGES, SHOW_LOG
 
 # Configurazione del logging
@@ -43,17 +43,28 @@ def write_to_csv(category, row):
         writer.writerow(row)
 
 def find_working_port():
-    ports = list(serial.tools.list_ports.comports())
-    for port in ports:
-        try:
-            with serial.Serial(port.device, BAUD_RATE, timeout=2) as ser:
-                ser.write(b'\n')
-                line = ser.readline().decode('utf-8', errors='ignore').strip()
-                if line:
-                    return port.device
-        except (serial.serialutil.SerialException, UnicodeDecodeError):
-            continue
-    return None
+    if PORT:
+        while True:
+            try:
+                with serial.Serial(PORT, BAUD_RATE, timeout=2) as ser:
+                    ser.write(b'\n')
+                    line = ser.readline().decode('utf-8', errors='ignore').strip()
+                    if line:
+                        return PORT
+            except (serial.SerialException, UnicodeDecodeError):
+                pass
+    else:
+        ports = list(serial.tools.list_ports.comports())
+        for port in ports:
+            try:
+                with serial.Serial(port.device, BAUD_RATE, timeout=2) as ser:
+                    ser.write(b'\n')
+                    line = ser.readline().decode('utf-8', errors='ignore').strip()
+                    if line:
+                        return port.device
+            except (serial.serialutil.SerialException, UnicodeDecodeError):
+                continue
+        return None
 
 def process_data(timestamp, pairs):
     temp_data = {}
