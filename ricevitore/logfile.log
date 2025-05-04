@@ -1,0 +1,10 @@
+2025-05-04 14:49:00,416 - [INFO] Avvio sistema ricevitore...
+2025-05-04 14:49:00,417 - [INFO] Cartella "DatiSensori" creata
+2025-05-04 14:49:00,418 - [INFO] Creato file "DatiSensori/temperatura_umidita.csv" con intestazioni
+2025-05-04 14:49:00,419 - [INFO] Creato file "DatiSensori/vibrazioni.csv" con intestazioni
+2025-05-04 14:49:00,421 - [INFO] Creato file "DatiSensori/allagamento.csv" con intestazioni
+2025-05-04 14:49:00,423 - [INFO] Creato file "DatiSensori/aria.csv" con intestazioni
+2025-05-04 14:49:00,424 - [INFO] Creato file "DatiSensori/batterie.csv" con intestazioni
+2025-05-04 14:49:04,307 - [INFO] COM3 - 115200 baud
+2025-05-04 14:49:50,118 - [ERROR] Errore di comunicazione
+2025-05-04 14:49:56,242 - [INFO] COM3 - 115200 baud
