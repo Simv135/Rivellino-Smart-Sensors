@@ -1,6 +1,6 @@
 # config.py
 
-# Connessione
+# Connessione porta COM
 PORT = None
 BAUD_RATE = 115200
 
