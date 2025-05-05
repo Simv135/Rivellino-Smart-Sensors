@@ -50,6 +50,8 @@ void loop() {
     printTempHumData();
 
     printAirData();
+
+    printBattery();
   }
 }
 
@@ -78,9 +80,9 @@ void readTempHum(){
 
 // Stampa Temperatura e Umidità
 void printTempHumData() {
-  Serial.print("c");
+  Serial.print("d");
   Serial.print(temp);
-  Serial.print("f");
+  Serial.print("g");
   Serial.println(hum);
 }
 
@@ -88,4 +90,10 @@ void printTempHumData() {
 void printAirData(){
   Serial.print("j");
   Serial.println(ppm_NO2);
+}
+
+// Stampa Valore batteria
+void printBattery(){
+  Serial.print("a");
+  Serial.println("85"); //placeholder
 }
