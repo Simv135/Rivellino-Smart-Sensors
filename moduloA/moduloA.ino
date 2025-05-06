@@ -30,12 +30,12 @@ void setup() {
   while (!Serial);
 
   if (!IMU.begin()) {
-    Serial.println("Errore inizializzazione IMU!");
+    Serial.println("[A] Errore inizializzazione IMU!");
     while (1);
   }
 
   if (!HS300x.begin()) {
-    Serial.println("Errore inizializzazione sensore HS300x!");
+    Serial.println("[A] Errore inizializzazione sensore HS300x!");
     while (1);
   }
 }

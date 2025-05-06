@@ -1,0 +1,63 @@
+[OPTIONS]
+Compatibility=1.1
+Full-text search=Yes
+Contents file=index.hhc
+Default Window=main
+Default topic=index.html
+Index file=index.hhk
+Language=0x409 English (United States)
+Title=airquality5
+
+[WINDOWS]
+main="airquality5","index.hhc","index.hhk","index.html","index.html",,,,,0x23520,,0x10387e,,,,,,,,0
+
+[FILES]
+_r_e_a_d_m_e_8md.html
+airquality5_8h.html
+airquality5_8h_source.html
+annotated.html
+classes.html
+dir_284d8a4e8fdfc7576a306d1a46c55d74.html
+dir_571c4f10af7f62c7445e3b884fc5210f.html
+dir_70c3b09ad1bb7d4ab532fcf4691d73bc.html
+dir_a5bdbfbbaa7895161d62825676df7980.html
+dir_ad57f505d84ff7c70d9078916e17c81b.html
+files.html
+functions.html
+functions_vars.html
+globals.html
+globals_defs.html
+globals_func.html
+group__airquality5.html
+group__chanel__data.html
+group__configuration__clat.html
+group__configuration__cmode.html
+group__configuration__cpol.html
+group__configuration__cque.html
+group__configuration__dr.html
+group__configuration__mode.html
+group__configuration__os.html
+group__configuration__pga.html
+group__error__code.html
+group__macros.html
+group__map__mikrobus.html
+group__public__function.html
+group__register.html
+group__type.html
+index.html
+main_8c.html
+modules.html
+structairquality5__cfg__t.html
+structairquality5__t.html
+bc_s.png
+bdwn.png
+closed.png
+nav_f.png
+nav_h.png
+open.png
+sync_off.png
+sync_on.png
+tab_a.png
+tab_b.png
+tab_h.png
+tab_s.png

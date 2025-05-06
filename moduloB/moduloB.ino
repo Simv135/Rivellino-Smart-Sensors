@@ -13,8 +13,7 @@ DHT dht11(DHT11_DATA_PIN, DHT11);
 Adafruit_ADS1X15 ads;
 
 // Variabili Temperatura e umidità
-float temp;
-float hum;
+float temp, hum;
 
 // Costante R0 per NO2
 float R0_NO2 = 20.0;
@@ -23,7 +22,7 @@ float R0_NO2 = 20.0;
 int16_t no2_raw;
 float no2_voltage;
 float R_s_NO2;
-float ppm_NO2 = 0;
+float ugm3_NO2 = 0;
 
 // Variabili timing
 unsigned long currentMillis;
@@ -58,9 +57,9 @@ void loop() {
 //Lettura Qualità dell'Aria (NO2)
 void readAirQuality() {
   no2_raw = ads.readADC_SingleEnded(1);
-  no2_voltage = no2_raw * 6.144 / 32768.0;
+  no2_voltage = no2_raw * 6.144 / 4096.0;
   R_s_NO2 = (5.0 - no2_voltage) / no2_voltage * R0_NO2;
-  ppm_NO2 = pow((R_s_NO2 / R0_NO2), 1.007) * 6.855;
+  ugm3_NO2 = pow((R_s_NO2 / R0_NO2), 1.007) * 6.855;
 }
 
 //Lettura Temperatura e Umidità
@@ -89,7 +88,7 @@ void printTempHumData() {
 // Stampa Qualità dell'Aria (NO2)
 void printAirData(){
   Serial.print("j");
-  Serial.println(ppm_NO2);
+  Serial.println(ugm3_NO2);
 }
 
 // Stampa Valore batteria
