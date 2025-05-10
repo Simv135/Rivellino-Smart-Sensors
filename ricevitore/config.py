@@ -12,7 +12,8 @@ CSV_FILES = {
     'env': 'temperatura_umidita.csv',
     'vib': 'vibrazioni.csv',
     'flood': 'allagamento.csv',
-    'air': 'aria.csv',
+    'airCO': 'ariaCO.csv',
+    'airNO2': 'ariaNO2.csv',
     'battery': 'batterie.csv'
 }
 
@@ -27,8 +28,8 @@ ID_MAP = {
     'f': ('umidità', 'a', 'env'),
     'g': ('umidità', 'b', 'env'),
     'h': ('umidità', 'c', 'env'),
-    'i': ('CO', 'a', 'air'),
-    'j': ('NO2', 'b', 'air'),
+    'i': ('CO', 'a', 'airCO'),
+    'j': ('NO2', 'b', 'airNO2'),
     'k': ('frequenza', 'a', 'vib'),
     'l': ('vibrazione', 'a', 'vib'),
     'm': ('allagamento', 'b', 'flood')
@@ -38,7 +39,8 @@ ID_MAP = {
 CSV_HEADERS = {
     'env': ('timestamp', 'modulo', 'temperatura (°C)', 'umidità (%)'),
     'vib': ('timestamp', 'modulo', 'vibrazione (m/s²)', 'frequenza (Hz)'),
-    'air': ('timestamp', 'modulo', 'CO (ppm)', 'NO2 (ppm)'),
+    'airCO': ('timestamp', 'modulo', 'CO (ppm)'),
+    'airNO2': ('timestamp', 'modulo', 'NO2 (ppm)'),
     'flood': ('timestamp', 'modulo', 'allagamento'),
     'battery': ('timestamp', 'modulo', 'batteria (%)')
 }
@@ -57,5 +59,4 @@ LOG_MESSAGES = {
     'comm_error': '[ERROR] Errore di comunicazione',
     'terminated': "[INFO] Programma terminato dall'utente"
 }
-
 

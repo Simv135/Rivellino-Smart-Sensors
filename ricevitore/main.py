@@ -30,27 +30,13 @@ def printLOG(message_key):
 ### Ricerca delle porte COM funzionanti ###
 #   ricerca e utilizza la porta definita nel file config.py
 #   se non è stata definita viene utilizzata la prima porta disponibile
-def find_working_port():
+def find_port():
     if PORT:
-        try:
-            with serial.Serial(PORT, BAUD_RATE, timeout=2) as ser:
-                ser.write(b'\n')
-                line = ser.readline().decode('utf-8', errors='ignore').strip()
-                if line:
-                    return PORT
-        except (serial.SerialException, UnicodeDecodeError):
-            pass
+        return PORT
     else:
         ports = list(serial.tools.list_ports.comports())
         for port in ports:
-            try:
-                with serial.Serial(port.device, BAUD_RATE, timeout=2) as ser:
-                    ser.write(b'\n')
-                    line = ser.readline().decode('utf-8', errors='ignore').strip()
-                    if line:
-                        return port.device
-            except (serial.serialutil.SerialException, UnicodeDecodeError):
-                continue
+            return port.device
         return None
 
 ### Scrittura dei file CSV ###
@@ -107,8 +93,7 @@ def process_data(timestamp, pairs):
                         value = collected_data[sensor_name]
                         break
                 row.append(value)
-
-            write_to_csv(category, row)
+            write_to_csv(category, row)     
 
 ### Analisi della stringa di dati ricevuta ###
 def parse_line(line):
@@ -141,7 +126,7 @@ if __name__ == '__main__':
     printLOG('init_start')
     while True:
         try:
-            port = find_working_port()
+            port = find_port()
             if port:
                 readData(port)
         except serial.SerialException:
