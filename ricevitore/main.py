@@ -8,7 +8,7 @@ from datetime import datetime
 
 ### Importazione del file di configurazione ###
 from config import PORT, BAUD_RATE, CSV_PATH, CSV_FILES, ID_MAP, CSV_HEADERS
-from config import SHOW_LOG, LOG_MESSAGES, LOG_FILE
+from config import SHOW_DATA, LOG_MESSAGES, LOG_FILE
 
 ### Configurazione del logging ###
 #   i dati di log vengono salvati in un file 'logfile.log'
@@ -21,10 +21,10 @@ def printLOG(message_key):
     )
     if message_key in LOG_MESSAGES:
         logging.info(LOG_MESSAGES[message_key])
-        if SHOW_LOG:
+        if SHOW_DATA:
             print(LOG_MESSAGES[message_key])
     else:
-        if SHOW_LOG:
+        if SHOW_DATA:
             print(message_key)
 
 ### Ricerca delle porte COM funzionanti ###

@@ -1,7 +1,11 @@
 # config.py
 
 # Connessione porta COM
+# PORT = None    →  Selezione automatica della prima porta disponibile
+# oppure
+# PORT = "<nome_della_porta>"  →  Consigliato se si utilizza più di una porta seriale
 PORT = None
+
 BAUD_RATE = 115200
 
 # Percorso file CSV
@@ -46,7 +50,7 @@ CSV_HEADERS = {
 }
 
 # Messaggi di LOG
-SHOW_LOG = True
+SHOW_DATA = True
 
 LOG_FILE = 'logfile.log'
 
