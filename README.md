@@ -1,5 +1,5 @@
 # Sensori Rivellino
-Gestione Sensori del Rivellino degli Invalidi.
+Gestione dei sensori all'interno del Rivellino degli Invalidi, facente parte del museo di Pietro Micca.
 
 Moduli:
 - A → tirante (Temperatura e Umidità, Aria, Vibrazioni)
@@ -22,7 +22,24 @@ Moduli:
 | l    | Vibrazioni                 | m/s²         | A       |
 | m    | Allagamento                | 0 / 1        | B       |
 
-Files CSV relativi ai dati di ciascun sensore:
+I dati verranno elaborati dal ricevitore e salvati all'interno dei files CSV.
+
+# Programma Ricevitore:
+
+Assicurarsi di avere l'ultima versione di Python3 installata sul dispositivo.
+
+Eseguire "pip install pyserial" nel terminale per installare la libreria pyserial.
+
+Eseguire "Python3 main.py" nel terminale, all'interno della cartella in cui si trova.
+
+Il programma proverà a connettersi alla porta seriale. Quando la connessione sarà stabilita verrà mostrata la porta utilizzata e la velocità di comunicazione impostata.
+
+Il programma riceverà dati periodicamente. Esempio di dati inviati da parte dei moduli:
+- moduloA:    c28f58k15.5l1.9i0.07
+- moduloB:    a61d27g56j0.06m1
+- moduloC:    b62e28h42
+
+I dati verranno salvati nella cartella DatiSensori nei seguenti files:
 
 | File CSV                   | ID del dato         |
 |----------------------------|---------------------|
@@ -33,27 +50,14 @@ Files CSV relativi ai dati di ciascun sensore:
 | vibrazioni.csv             | k, l                |
 | temperatura_umidita.csv    | c, d, e, f, g, h    |
 
-Esempio di dati inviati al ricevitore:
-- moduloA:  c28f58k15.5l1.9i0.07
-- moduloB:  a61d27g56j0.06m1
-- moduloC:  b62e28h42
+Il file di configurazione "config.py" permette di modificare alcuni parametri relativi al programma di ricezione dei dati, tra cui:
+- Selezionare la porta di comunicazione
+- Selezionare la velocità di comunicazione (baud rate)
+- Selezionare il percorso dei files CSV
+- Rinominare i files CSV e di inserirne di nuovi
+- Mappare nuovi sensori
+- Modificare le colonne dei files CSV
+- Scegliere se mostrare i dati ricevuti sul terminale
+- Personalizzare i messaggi di log
 
-# Programma Ricevitore:
-
-Assicurarsi di avere l'ultima versione di Python3 installata sul dispositivo.
-
-Eseguire "pip install pyserial" nel terminale per installare la libreria pyserial.
-
-Eseguire "Python3 main.py" nel terminale, all'interno della cartella in cui si trova.
-
-File di configurazione "config.py":
-- Selezione della porta di comunicazione
-- Selezione della velocità di comunicazione (baud rate)
-- Selezione del percorso dei files CSV
-- Possibilità di rinominare i files CSV e di inserirne di nuovi
-- Possibilità di mappare nuovi sensori
-- Possibilità di modificare le colonne dei files CSV
-- Possibilità di scegliere se mostrare i dati ricevuti sul terminale
-- Personalizzazione dei messaggi di log
-
-Le informazioni di log vengono salvate all'interno del file → logfile.log
+Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno di: "logfile.log"
