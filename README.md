@@ -26,7 +26,7 @@ Moduli:
 
 I dati verranno elaborati dal ricevitore e salvati all'interno dei files CSV.
 
-# Programma Ricevitore:
+# Ricevitore:
 
 Assicurarsi di avere l'ultima versione di Python3 installata sul dispositivo.
 
@@ -66,6 +66,28 @@ Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno
 
 # moduloA
 
+| ID   | Descrizione                | Valore       |
+|------|----------------------------|--------------|
+| c    | Temperatura                | °C           |
+| f    | Umidità                    | %            |
+| i    | Aria (CO)                  | ppm          |
+| k    | Vibrazioni                 | Hz           |
+| l    | Vibrazioni                 | m/s²         |
 
 # moduloB
 
+| ID   | Descrizione                | Valore       |
+|------|----------------------------|--------------|
+| a    | Batteria                   | %            |
+| d    | Temperatura                | °C           |
+| g    | Umidità                    | %            |
+| j    | Aria (NO2)                 | ppm          |
+| m    | Allagamento                | 0 / 1        |
+
+# moduloC
+
+| ID   | Descrizione                | Valore       |
+|------|----------------------------|--------------|
+| b    | Batteria                   | %            |
+| e    | Temperatura                | °C           |
+| h    | Umidità                    | %            |
