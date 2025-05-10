@@ -66,6 +66,9 @@ Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno
 
 # moduloA
 
+Esempio di dati inviati:
+c28f58k15.5l1.9i0.07
+
 | ID   | Descrizione                | Valore       |
 |------|----------------------------|--------------|
 | c    | Temperatura                | °C           |
@@ -76,6 +79,9 @@ Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno
 
 # moduloB
 
+Esempio di dati inviati:
+a61d27g56j0.06m1
+
 | ID   | Descrizione                | Valore       |
 |------|----------------------------|--------------|
 | a    | Batteria                   | %            |
@@ -85,6 +91,9 @@ Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno
 | m    | Allagamento                | 0 / 1        |
 
 # moduloC
+
+Esempio di dati inviati:
+b62e28h42
 
 | ID   | Descrizione                | Valore       |
 |------|----------------------------|--------------|
