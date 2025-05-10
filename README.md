@@ -62,7 +62,7 @@ Il file di configurazione "config.py" permette di modificare alcuni parametri re
 
 Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno di: "logfile.log"
 
-# moduloA
+# ModuloA
 
 Esempio di dati inviati:
 c28f58k15.5l1.9i0.07
@@ -75,7 +75,7 @@ c28f58k15.5l1.9i0.07
 | k    | Vibrazioni                 | Hz           |
 | l    | Vibrazioni                 | m/s²         |
 
-# moduloB
+# ModuloB
 
 Esempio di dati inviati:
 a61d27g56j0.06m1
@@ -88,7 +88,7 @@ a61d27g56j0.06m1
 | j    | Aria (NO2)                 | ppm          |
 | m    | Allagamento                | 0 / 1        |
 
-# moduloC
+# ModuloC
 
 Esempio di dati inviati:
 b62e28h42
