@@ -6,8 +6,6 @@ Moduli:
 - B → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
 - C → polveriera (Batterie, Temperatura e Umidità)
 
-![Mappa_Rivellino](https://github.com/user-attachments/assets/0eda5039-46fb-40d3-8ec3-fc16ac8c2962)
-
 | ID   | Descrizione                | Valore       | Modulo  |
 |------|----------------------------|--------------|---------|
 | a    | Batteria                   | %            | B       |
