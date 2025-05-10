@@ -22,18 +22,29 @@ Moduli:
 | l    | Vibrazioni                 | m/s²         | A       |
 | m    | Allagamento                | 0 / 1        | B       |
 
-Programma Ricevitore:
+Files CSV relativi ai dati di ciascun sensore:
 
-Files CSV all'interno della cartella "DatiSensori", relativi ai dati di ciascun sensore:
+| File CSV                   | ID del dato         |
+|----------------------------|---------------------|
+| allagamento.csv            | m                   |
+| ariaCO.csv                 | i                   |
+| ariaNO2.csv                | j                   |
+| batterie.csv               | a, b                |
+| vibrazioni.csv             | k, l                |
+| temperatura_umidita.csv    | c, d, e, f, g, h    |
 
-| File CSV                   | ID del dato sensore          |
-|----------------------------|------------------------------|
-| allagamento.csv            | m                            |
-| ariaCO.csv                 | i                            |
-| ariaNO2.csv                | j                            |
-| batterie.csv               | a, b                         |
-| vibrazioni.csv             | k, l                         |
-| temperatura_umidita.csv    | c, d, e, f, g, h             |
+Esempio di dati inviati al ricevitore:
+- moduloA:  c28f58k15.5l1.9i0.07
+- moduloB:  a61d27g56j0.06m1
+- moduloC:  b62e28h42
+
+# Programma Ricevitore:
+
+Assicurarsi di avere l'ultima versione di Python3 installata sul dispositivo.
+
+Eseguire "pip install pyserial" nel terminale per installare la libreria pyserial.
+
+Eseguire "Python3 main.py" nel terminale, all'interno della cartella in cui si trova.
 
 File di configurazione "config.py":
 - Selezione della porta di comunicazione
@@ -44,3 +55,5 @@ File di configurazione "config.py":
 - Possibilità di modificare le colonne dei files CSV
 - Possibilità di scegliere se mostrare i dati ricevuti sul terminale
 - Personalizzazione dei messaggi di log
+
+Le informazioni di log vengono salvate all'interno del file → logfile.log
