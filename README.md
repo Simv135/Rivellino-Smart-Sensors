@@ -1,31 +1,46 @@
 # Sensori Rivellino
-Gestione sensori rivellino degli invalidi.
+Gestione Sensori del Rivellino degli Invalidi.
 
 Moduli:
-- a → tirante (Temperatura e Umidità, Aria, Vibrazioni)
-- b → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
-- c → polveriera (Batterie, Temperatura e Umidità)
+- A → tirante (Temperatura e Umidità, Aria, Vibrazioni)
+- B → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
+- C → polveriera (Batterie, Temperatura e Umidità)
 
 | ID   | Descrizione                | Valore       | Modulo  |
 |------|----------------------------|--------------|---------|
-| a    | Batteria                   | %            | b       |
-| b    | Batteria                   | %            | c       |
-| c    | Temperatura                | °C           | a       |
-| d    | Temperatura                | °C           | b       |
-| e    | Temperatura                | °C           | c       |
-| f    | Umidità                    | %            | a       |
-| g    | Umidità                    | %            | b       |
-| h    | Umidità                    | %            | c       |
-| i    | Aria (CO)                  | ppm          | a       |
-| j    | Aria (NO2)                 | ppm          | b       |
-| k    | Vibrazioni                 | Hz           | a       |
-| l    | Vibrazioni                 | m/s²         | a       |
-| m    | Allagamento                | 0 / 1        | b       |
+| a    | Batteria                   | %            | B       |
+| b    | Batteria                   | %            | C       |
+| c    | Temperatura                | °C           | A       |
+| d    | Temperatura                | °C           | B       |
+| e    | Temperatura                | °C           | C       |
+| f    | Umidità                    | %            | A       |
+| g    | Umidità                    | %            | B       |
+| h    | Umidità                    | %            | C       |
+| i    | Aria (CO)                  | ppm          | A       |
+| j    | Aria (NO2)                 | ppm          | B       |
+| k    | Vibrazioni                 | Hz           | A       |
+| l    | Vibrazioni                 | m/s²         | A       |
+| m    | Allagamento                | 0 / 1        | B       |
 
-| File CSV                    | ID del dato corrispondente       |
-|----------------------------|----------------------------------|
-| allagamento.csv            | m                                |
-| aria.csv                   | i, j                             |
-| batterie.csv               | a, b                             |
-| vibrazioni.csv             | k, l                             |
-| temperatura_umidita.csv    | c, d, e, f, g, h                 |
+Programma Ricevitore:
+
+Files CSV all'interno della cartella "DatiSensori", relativi ai dati di ciascun sensore:
+
+| File CSV                   | ID del dato sensore          |
+|----------------------------|------------------------------|
+| allagamento.csv            | m                            |
+| ariaCO.csv                 | i                            |
+| ariaNO2.csv                | j                            |
+| batterie.csv               | a, b                         |
+| vibrazioni.csv             | k, l                         |
+| temperatura_umidita.csv    | c, d, e, f, g, h             |
+
+File di configurazione "config.py":
+- Selezione della porta di comunicazione
+- Selezione della velocità di comunicazione (baud rate)
+- Selezione del percorso dei files CSV
+- Possibilità di rinominare i files CSV e di inserirne di nuovi
+- Possibilità di mappare nuovi sensori
+- Possibilità di modificare le colonne dei files CSV
+- Possibilità di scegliere se mostrare i dati ricevuti sul terminale
+- Personalizzazione dei messaggi di log
