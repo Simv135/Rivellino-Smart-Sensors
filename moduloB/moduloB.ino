@@ -93,7 +93,7 @@ void printAirData(){
 
 // Stampa valore Allagamento
 void printwater(){
-//A0 is the reading port
+//A0 è il pin di lettura
   int w1=0;
   int w2=0;
   w1 = analogRead(A0);
