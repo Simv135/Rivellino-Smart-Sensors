@@ -91,6 +91,19 @@ void printAirData(){
   Serial.println(ugm3_NO2);
 }
 
+// Stampa valore Allagamento
+void printwater(){
+//A0 is the reading port
+  int w1=0;
+  int w2=0;
+  w1 = analogRead(A0);
+  delay(1000);
+  w2 = analogRead(A0);
+  w1 = (w1+w2)/2;
+  if(w1>=200){
+    Serial.println("Acqua rilevata");}}
+     
+
 // Stampa Valore batteria
 void printBattery(){
   Serial.print("a");
