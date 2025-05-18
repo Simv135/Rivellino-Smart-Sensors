@@ -1,111 +1,213 @@
+// --- LIBRERIE ---
 #include <Wire.h>
-#include <Adafruit_ADS1X15.h>
 #include "DHT.h"
+#include <avr/sleep.h>
+#include <avr/power.h>
+#include <avr/wdt.h>
 
-#define ENV_INTERVAL 5000            // Intervallo lettura (ms)
-#define DHT11_VCC_PIN 7              // Pin che alimenta il DHT11
-#define DHT11_DATA_PIN 8             // Pin dati del DHT11
+// --- CONFIGURAZIONI ---
+#define WDT_INTERVAL          8     // Ogni ciclo WDT è 8s
+#define TEMP_HUM_CYCLES       4     // Leggi ogni 32s
+#define WATER_CYCLES          1     // Leggi ogni 8s
+#define WATER_THRESHOLD       10    // Soglia allagamento
 
-// Inizializzazione DHT11
+// --- PIN ---
+#define DHT11_VCC_PIN         7
+#define DHT11_DATA_PIN        8
+#define HW038_VCC_PIN         2
+#define HW038_DATA_PIN        A0
+#define LED_BATTERY           11
+
 DHT dht11(DHT11_DATA_PIN, DHT11);
 
-// Istanza ADS1115
-Adafruit_ADS1X15 ads;
-
-// Variabili Temperatura e umidità
+// --- VARIABILI SENSORI ---
 float temp, hum;
+unsigned short voltage;
+byte battery;
+bool all;
 
-// Costante R0 per NO2
-float R0_NO2 = 20.0;
+// --- VARIABILI TIMER ---
+volatile byte temp_hum_counter = 0;
+volatile byte water_counter = 0;
+volatile bool time_to_read_temp_hum = false;
+volatile bool time_to_read_water = false;
 
-// Variabili lettura NO2
-int16_t no2_raw;
-float no2_voltage;
-float R_s_NO2;
-float ugm3_NO2 = 0;
-
-// Variabili timing
-unsigned long currentMillis;
-unsigned long previousMillis = 0;
-
+// --- SETUP ---
 void setup() {
-  Serial.begin(115200);
   pinMode(DHT11_VCC_PIN, OUTPUT);
-  digitalWrite(DHT11_VCC_PIN, LOW); // Tieni spento all'avvio
+  digitalWrite(DHT11_VCC_PIN, LOW);
 
-  ads.begin(); // Inizializza ADS
+  pinMode(HW038_VCC_PIN, OUTPUT);
+  digitalWrite(HW038_VCC_PIN, LOW);
+
+  Serial.begin(9600);
+  while (!Serial);
+
+  dht11.begin();
+
+  setupWatchdog();
+
+  powerStateLed();  //visualizza stato della batteria da led
 }
 
+// --- LOOP PRINCIPALE ---
 void loop() {
-  currentMillis = millis();
+  sleepUntilNextReading();
 
-  if (currentMillis - previousMillis >= ENV_INTERVAL) {
-    previousMillis = currentMillis;
-
-    readAirQuality();
-
+  if (time_to_read_temp_hum) {
     readTempHum();
+    readBattery();
+    sendData(
+      "d" + String(temp) + 
+      "g" + String(hum) + 
+      "m" + String(all) + 
+      "a" + String(battery)
+    );
+    time_to_read_temp_hum = false;
+  }
 
-    printTempHumData();
-
-    printAirData();
-
-    printBattery();
+  if (time_to_read_water) {
+    readWater();
+    if (all=1){
+      sendData("m" + String(all));
+    }
+    time_to_read_water = false;
   }
 }
 
-//Lettura Qualità dell'Aria (NO2)
-void readAirQuality() {
-  no2_raw = ads.readADC_SingleEnded(1);
-  no2_voltage = no2_raw * 6.144 / 4096.0;
-  R_s_NO2 = (5.0 - no2_voltage) / no2_voltage * R0_NO2;
-  ugm3_NO2 = pow((R_s_NO2 / R0_NO2), 1.007) * 6.855;
+// --- INVIO DATI ---
+void sendData(String data) {
+  Serial.println(F("AT+MODE=0"));  // Wake
+  delay(30);
+  Serial.print(F("AT+SEND=1,"));
+  Serial.print(data.length());
+  Serial.print(",");
+  Serial.println(data);
+  delay(30);
+  Serial.println(F("AT+MODE=1"));  // Sleep
 }
 
-//Lettura Temperatura e Umidità
-void readTempHum(){
-  //Accendi DHT11
+// --- LETTURA TEMPERATURA / UMIDITÀ ---
+void readTempHum() {
   digitalWrite(DHT11_VCC_PIN, HIGH);
-  delay(2000);
-  dht11.begin();
-
-  //Lettura dei dati dai sensori di Temperatura e Umidità
+  delay(1000);
   temp = dht11.readTemperature();
   hum = dht11.readHumidity();
-
-  //Spegni DHT11
   digitalWrite(DHT11_VCC_PIN, LOW);
 }
 
-// Stampa Temperatura e Umidità
-void printTempHumData() {
-  Serial.print("d");
-  Serial.print(temp);
-  Serial.print("g");
-  Serial.println(hum);
+// --- LETTURA ALLAGAMENTO ---
+void readWater() {
+  digitalWrite(HW038_VCC_PIN, HIGH);
+  delay(5);
+
+  int count = 0;
+  for (byte i = 0; i < 5; i++) {
+    count += (analogRead(HW038_DATA_PIN) >= WATER_THRESHOLD);
+    delay(5);
+  }
+
+  all = (count >= 3);
+  digitalWrite(HW038_VCC_PIN, LOW);
 }
 
-// Stampa Qualità dell'Aria (NO2)
-void printAirData(){
-  Serial.print("j");
-  Serial.println(ugm3_NO2);
+// --- LETTURA BATTERIA ---
+void readBattery() {
+  ADCSRA = (1 << ADEN) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
+  ADMUX = (1 << REFS0) | (1 << MUX3) | (1 << MUX2) | (1 << MUX1);
+  delay(1);
+  ADCSRA |= (1 << ADSC);
+  while (bit_is_set(ADCSRA, ADSC));
+  int result = ADC;
+  ADCSRA |= (1 << ADSC);
+  while (bit_is_set(ADCSRA, ADSC));
+  result = ADC;
+
+  voltage = 1148566UL / (unsigned long)result; // Vcc stimato
+
+  // Percentuale con correzione errore
+  if      (voltage < 4600) battery = 0;   //0.5 s x1
+  else if (voltage < 4850) battery = 20;  //0.5 s x2
+  else if (voltage < 4950) battery = 40;  //1 s x1
+  else if (voltage < 5000) battery = 60;  //1 s x2
+  else if (voltage < 5025) battery = 80;  //2 s x1
+  else                     battery = 100; //2 s x2
 }
 
-// Stampa valore Allagamento
-void printwater(){
-//A0 è il pin di lettura
-  int w1=0;
-  int w2=0;
-  w1 = analogRead(A0);
-  delay(1000);
-  w2 = analogRead(A0);
-  w1 = (w1+w2)/2;
-  if(w1>=200){
-    Serial.println("Acqua rilevata");}}
-     
+void powerStateLed(void){
+  readBattery();
+  if (battery==0){
+    digitalWrite(LED_BATTERY, HIGH);
+    delay(500);
+    digitalWrite(LED_BATTERY, LOW);
+  }else if (battery<=20){
+    digitalWrite(LED_BATTERY, HIGH);
+    delay(500);
+    digitalWrite(LED_BATTERY, LOW);
+    delay(500);
+    digitalWrite(LED_BATTERY, HIGH);
+    delay(500);
+    digitalWrite(LED_BATTERY, LOW);
+  }else if (battery<=40){
+    digitalWrite(LED_BATTERY, HIGH);
+    delay(1000);
+    digitalWrite(LED_BATTERY, LOW);
+  }else if (battery<=60){
+    digitalWrite(LED_BATTERY, HIGH);
+    delay(1000);
+    digitalWrite(LED_BATTERY, LOW);
+    delay(1000);
+    digitalWrite(LED_BATTERY, HIGH);
+    delay(1000);
+    digitalWrite(LED_BATTERY, LOW);
+  }else if (battery<=80){
+    digitalWrite(LED_BATTERY, HIGH);
+    delay(2000);
+    digitalWrite(LED_BATTERY, LOW);
+  }else if (battery<=100){
+    digitalWrite(LED_BATTERY, HIGH);
+    delay(2000);
+    digitalWrite(LED_BATTERY, LOW);
+    delay(2000);
+    digitalWrite(LED_BATTERY, HIGH);
+    delay(2000);
+    digitalWrite(LED_BATTERY, LOW);
+  }
+}
 
-// Stampa Valore batteria
-void printBattery(){
-  Serial.print("a");
-  Serial.println("85"); //placeholder
+// --- WATCHDOG ---
+void setupWatchdog() {
+  cli();
+  wdt_reset();
+  MCUSR &= ~(1 << WDRF);
+  WDTCSR |= (1 << WDCE) | (1 << WDE);
+  WDTCSR = (1 << WDIE) | (1 << WDP3) | (0 << WDP2) | (0 << WDP1) | (1 << WDP0); // 8s
+  sei();
+}
+
+ISR(WDT_vect) {
+  temp_hum_counter++;
+  water_counter++;
+
+  if (water_counter >= WATER_CYCLES) {
+    time_to_read_water = true;
+    water_counter = 0;
+  }
+
+  if (temp_hum_counter >= TEMP_HUM_CYCLES) {
+    time_to_read_temp_hum = true;
+    temp_hum_counter = 0;
+  }
+}
+
+// --- SLEEP ---
+void sleepUntilNextReading() {
+  ADCSRA &= ~(1 << ADEN);
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  do {
+    sleep_enable();
+    sleep_mode();
+    sleep_disable();
+  } while (!time_to_read_temp_hum && !time_to_read_water);
+  ADCSRA |= (1 << ADEN);
 }
