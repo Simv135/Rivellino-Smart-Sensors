@@ -6,7 +6,7 @@
 # PORT = "<nome_della_porta>"  →  Consigliato se si utilizza più di una porta seriale
 PORT = None
 
-BAUD_RATE = 115200
+BAUD_RATE = 9600
 
 # Percorso file CSV
 CSV_PATH = "DatiSensori"
