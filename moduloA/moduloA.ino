@@ -21,21 +21,27 @@ unsigned long currentTime = 0;
 unsigned long deltaTime = 0;
 float frequencyVibration = 0.0;
 
+// Variabili messaggi
+String rawData, message;
+int firstComma, secondComma, thirdComma;
+
 // Timer temperatura/umidità
 unsigned long lastEnvRead = 0;
 unsigned long currentMillis = 0;
 
 void setup() {
-  Serial.begin(115200);
+  Serial1.begin(9600);
+  while (!Serial1);
+  Serial.begin(9600);
   while (!Serial);
 
   if (!IMU.begin()) {
-    Serial.println("[A] Errore inizializzazione IMU!");
+    Serial1.println("[A] Errore inizializzazione IMU!");
     while (1);
   }
 
   if (!HS300x.begin()) {
-    Serial.println("[A] Errore inizializzazione sensore HS300x!");
+    Serial1.println("[A] Errore inizializzazione sensore HS300x!");
     while (1);
   }
 }
@@ -47,7 +53,6 @@ void loop() {
     // Filtro per stampare solo se:
     // - la vibrazione è cambiata significativamente
     // - la frequenza è cambiata abbastanza da evitare ripetizioni inutili
-    // - deltaTime non è esattamente il minimo (50 ms), per evitare falsi 20 Hz
     if (fabs(vibration - lastPrintedVibration) >= VIBRATION_THRESHOLD &&
         fabs(frequencyVibration - lastPrintedFrequency) >= 0.5 &&
         deltaTime != VIBRATION_MIN_INTERVAL &&
@@ -62,6 +67,26 @@ void loop() {
   if (currentMillis - lastEnvRead >= ENV_INTERVAL) {
     lastEnvRead = currentMillis;
     printTempHumData();
+  }
+
+  receiveData();
+}
+
+void receiveData() {
+  if (Serial1.available()) {
+    rawData = Serial1.readStringUntil('\n');  // Legge fino a newline
+
+    if (rawData.startsWith("+RCV=")) {
+      firstComma = rawData.indexOf(',');
+      secondComma = rawData.indexOf(',', firstComma + 1);
+      thirdComma = rawData.indexOf(',', secondComma + 1);
+
+      if (firstComma > 0 && secondComma > 0 && thirdComma > 0) {
+        message = rawData.substring(secondComma + 1, thirdComma);
+        Serial1.println(message);
+        Serial.println(message);
+      }
+    }
   }
 }
 
@@ -90,6 +115,11 @@ bool readAccelerometer() {
 
 // Stampa dati vibrazione
 void printVibrationData() {
+  Serial1.print("k");  // Frequenza (Hz)
+  Serial1.print(frequencyVibration, 2);
+  Serial1.print("l");  // Intensità vibrazione (m/s²)
+  Serial1.println(vibration, 2);
+
   Serial.print("k");  // Frequenza (Hz)
   Serial.print(frequencyVibration, 2);
   Serial.print("l");  // Intensità vibrazione (m/s²)
@@ -98,6 +128,11 @@ void printVibrationData() {
 
 // Stampa temperatura e umidità
 void printTempHumData() {
+  Serial1.print("c");  // Temperatura
+  Serial1.print(HS300x.readTemperature());
+  Serial1.print("f");  // Umidità
+  Serial1.println(HS300x.readHumidity());
+
   Serial.print("c");  // Temperatura
   Serial.print(HS300x.readTemperature());
   Serial.print("f");  // Umidità
