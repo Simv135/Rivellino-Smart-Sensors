@@ -78,12 +78,12 @@ void loop() {
 // --- INVIO DATI ---
 void sendData(String data) {
   Serial.println(F("AT+MODE=0"));  // Wake
-  delay(30);
+  delay(40);
   Serial.print(F("AT+SEND=1,"));
   Serial.print(data.length());
   Serial.print(",");
   Serial.println(data);
-  delay(30);
+  delay(40);
   Serial.println(F("AT+MODE=1"));  // Sleep
 }
 
