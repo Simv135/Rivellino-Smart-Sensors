@@ -125,18 +125,18 @@ void readBattery() {
 
   voltage = 1148566UL / (unsigned long)result; // Vcc stimato
 
-  // Percentuale con correzione errore
-  if      (voltage >= 3438 && voltage < 3802) battery = 0;   //0.5 s x1
-  else if (voltage >= 3802 && voltage < 4166) battery = 20;  //0.5 s x2
-  else if (voltage >= 4166 && voltage < 4530) battery = 40;  //1 s x1
-  else if (voltage >= 4530 && voltage < 4894) battery = 60;  //1 s x2
-  else if (voltage >= 3894 && voltage < 5076) battery = 80;  //2 s x1
-  else if (voltage >= 5076)                   battery = 100; //2 s x2
+   // Percentuale con correzione errore
+  if      (voltage >= 3437 && voltage < 3801) battery = 0;   //0.5 s x1
+  else if (voltage >= 3801 && voltage < 4165) battery = 20;  //0.5 s x2
+  else if (voltage >= 4165 && voltage < 4529) battery = 40;  //1 s x1
+  else if (voltage >= 4529 && voltage < 4893) battery = 60;  //1 s x2
+  else if (voltage >= 3893 && voltage < 5075) battery = 80;  //2 s x1
+  else if (voltage >= 5075)                   battery = 100; //2 s x2
 }
 //la misura va da 3,300V + errore a 5080 + errore quindi da 3,437V a 5,258
 //L'errore applicato agli estremi dell'intervallo applica un errore empirico ai valori mediani concorde con le misure prese
 //intervallo 3,300-5,080V diventa quindi 3,437V a 5,258 ed avendo diametro 1821 si hanno 5 sottointervalli da 364V
-//rispettivamente 3,438-3,802-4,166-4,530-4,894-5258, nota: si parte da 3438 per dare un margine di 1mV e si pone limite a 5076 perchè è il valore oltre cui
+//rispettivamente 3,438-3,802-4,166-4,530-4,894-5258, nota: si pone limite a 5075 perchè è il valore oltre cui
 //la batteria è oltre il 90% ed è quindi conveniente considerarla come pienamente carica.
 
 void powerStateLed(void){
