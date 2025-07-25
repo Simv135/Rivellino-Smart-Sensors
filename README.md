@@ -3,7 +3,7 @@
 ## Introduzione
 
 Il sistema **Rivellino Smart Sensors** è progettato per monitorare le condizioni ambientali all'interno del ***Rivellino degli Invalidi***, parte del **Museo Pietro Micca** di Torino.  
-I sensori installati nei tre moduli principali — **Tirante (A)**, **Galleria (B)** e **Polveriera (C)** — raccolgono dati su:
+I sensori installati nei tre moduli principali **Tirante (A)**, **Galleria (B)** e **Polveriera (C)** raccolgono dati su:
 
 - Temperatura  
 - Umidità  
@@ -44,7 +44,7 @@ Assicurarsi di avere l'ultima versione di Python3 installata sul dispositivo.
 
 Eseguire ```pip install pyserial``` nel terminale per installare la libreria pyserial.
 
-Eseguire ```Python3 main.py``` nel terminale, all'interno della cartella in cui si trova.
+Eseguire ```Python3 main.py``` nel terminale, all'interno della cartella in cui si trova il programma ricevitore.
 
 Il programma proverà a connettersi alla porta seriale. Quando la connessione sarà stabilita verrà mostrata la porta utilizzata e la velocità di comunicazione impostata.
 
