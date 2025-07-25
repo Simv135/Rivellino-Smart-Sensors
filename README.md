@@ -21,8 +21,6 @@ Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipoge
 2. [Modulo B](#ModuloB) → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento) - Arduino Pro Mini
 3. [Modulo C](#ModuloC) → polveriera (Batterie, Temperatura e Umidità) - Arduino Pro Mini
 
-<br><br>
-
 <img width="1071" height="572" alt="schema-moduli" src="https://github.com/user-attachments/assets/4dd5736c-9acb-4d7d-bbe6-4dd24cb1500f"/>
 
 <br><br>
