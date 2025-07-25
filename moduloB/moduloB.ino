@@ -49,8 +49,6 @@ void setup() {
 
   setupWatchdog();
 
-  readBattery();
-
   powerStateLed();  //visualizza stato della batteria da led
 }
 
