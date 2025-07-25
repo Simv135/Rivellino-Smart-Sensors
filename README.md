@@ -44,6 +44,8 @@ Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipoge
 
 I dati verranno elaborati dal ricevitore e salvati all'interno dei files CSV.
 
+<br><br>
+
 ## Posizionamento
 
 <br><br>
