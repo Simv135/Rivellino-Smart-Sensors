@@ -50,8 +50,6 @@ I dati verranno elaborati dal ricevitore e salvati all'interno dei files CSV.
 
 ## Posizionamento
 
-<br><br>
-
 <img width="2160" height="1208" alt="Mappa_Rivellino" src="https://github.com/user-attachments/assets/9a15419e-a349-405f-b95e-75f8a2fb708f"/>
 
 <br><br>
