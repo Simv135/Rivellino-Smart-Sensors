@@ -26,6 +26,8 @@ Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipoge
 
 <br><br>
 
+## I dati
+
 | ID   | Descrizione                | Valore       | Modulo  |
 |------|----------------------------|--------------|---------|
 | a    | Batteria                   | %            | B       |
