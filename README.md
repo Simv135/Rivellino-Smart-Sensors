@@ -1,7 +1,21 @@
 # Sensori Rivellino
-Gestione dei sensori all'interno del Rivellino degli Invalidi, facente parte del museo di Pietro Micca.
 
-Moduli:
+## Introduzione
+
+Il sistema **Sensori Rivellino** è progettato per monitorare le condizioni ambientali all'interno del *Rivellino degli Invalidi*, parte del **Museo Pietro Micca** di Torino.  
+I sensori installati nei tre moduli principali — **Tirante (A)**, **Galleria (B)** e **Polveriera (C)** — raccolgono dati su:
+
+- Temperatura  
+- Umidità  
+- Qualità dell’aria (CO e NO₂)  
+- Vibrazioni  
+- Stato delle batterie  
+- Allagamenti  
+
+Questi dati vengono trasmessi via seriale ad un Raspberry Pi e letti da un ricevitore scritto in Python, che li elabora e li salva automaticamente in file CSV.  
+Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipogei, contribuendo alla **tutela e alla conservazione del patrimonio storico**.
+
+I moduli:
 - A → tirante (Temperatura e Umidità, Aria, Vibrazioni)
 - B → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
 - C → polveriera (Batterie, Temperatura e Umidità)
@@ -71,7 +85,6 @@ c28f58k15.5l1.9i0.07
 |------|----------------------------|--------------|
 | c    | Temperatura                | °C           |
 | f    | Umidità                    | %            |
-| i    | Aria (CO)                  | ppm          |
 | k    | Vibrazioni                 | Hz           |
 | l    | Vibrazioni                 | m/s²         |
 
@@ -85,6 +98,7 @@ a61d27g56j0.06m1
 | a    | Batteria                   | %            |
 | d    | Temperatura                | °C           |
 | g    | Umidità                    | %            |
+| i    | Aria (CO)                  | ppm          |
 | j    | Aria (NO2)                 | ppm          |
 | m    | Allagamento                | 0 / 1        |
 
