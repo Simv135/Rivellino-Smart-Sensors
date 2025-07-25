@@ -42,16 +42,16 @@ I dati verranno elaborati dal ricevitore e salvati all'interno dei files CSV.
 
 Assicurarsi di avere l'ultima versione di Python3 installata sul dispositivo.
 
-Eseguire ```bash pip install pyserial``` nel terminale per installare la libreria pyserial.
+Eseguire ```pip install pyserial``` nel terminale per installare la libreria pyserial.
 
-Eseguire "Python3 main.py" nel terminale, all'interno della cartella in cui si trova.
+Eseguire ```Python3 main.py``` nel terminale, all'interno della cartella in cui si trova.
 
 Il programma proverà a connettersi alla porta seriale. Quando la connessione sarà stabilita verrà mostrata la porta utilizzata e la velocità di comunicazione impostata.
 
 Il programma riceverà dati periodicamente. Esempio di dati inviati da parte dei moduli:
-- moduloA:    c28f58k15.5l1.9i0.07
-- moduloB:    a61d27g56j0.06m1
-- moduloC:    b62e28h42
+- moduloA:    `c28f58k15.5l1.9i0.07`
+- moduloB:    `a61d27g56j0.06m1`
+- moduloC:    `b62e28h42`
 
 I dati verranno salvati nella cartella DatiSensori nei seguenti files:
 
@@ -64,7 +64,7 @@ I dati verranno salvati nella cartella DatiSensori nei seguenti files:
 | vibrazioni.csv             | k, l                |
 | temperatura_umidita.csv    | c, d, e, f, g, h    |
 
-Il file di configurazione "config.py" permette di modificare alcuni parametri relativi al programma di ricezione dei dati, tra cui:
+Il file di configurazione `config.py` permette di modificare alcuni parametri relativi al programma di ricezione dei dati, tra cui:
 - Selezionare la porta di comunicazione
 - Selezionare la velocità di comunicazione (baud rate)
 - Selezionare il percorso dei files CSV
@@ -74,12 +74,12 @@ Il file di configurazione "config.py" permette di modificare alcuni parametri re
 - Scegliere se mostrare i dati ricevuti sul terminale
 - Personalizzare i messaggi di log
 
-Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno di: "logfile.log"
+Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno di: `logfile.log`
 
 ## ModuloA
 
 Esempio di dati inviati:
-c28f58k15.5l1.9i0.07
+`c28f58k15.5l1.9i0.07`
 
 | ID   | Descrizione                | Valore       |
 |------|----------------------------|--------------|
@@ -91,7 +91,7 @@ c28f58k15.5l1.9i0.07
 ## ModuloB
 
 Esempio di dati inviati:
-a61d27g56j0.06m1
+`a61d27g56j0.06m1`
 
 | ID   | Descrizione                | Valore       |
 |------|----------------------------|--------------|
@@ -105,7 +105,7 @@ a61d27g56j0.06m1
 ## ModuloC
 
 Esempio di dati inviati:
-b62e28h42
+`b62e28h42`
 
 | ID   | Descrizione                | Valore       |
 |------|----------------------------|--------------|
