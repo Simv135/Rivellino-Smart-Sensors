@@ -65,8 +65,8 @@ Eseguire ```Python3 main.py``` nel terminale, all'interno della cartella in cui 
 Il programma proverà a connettersi alla porta seriale. Quando la connessione sarà stabilita verrà mostrata la porta utilizzata e la velocità di comunicazione impostata.
 
 Il programma riceverà dati periodicamente. Esempio di dati inviati da parte dei moduli:
-- moduloA:    `c28f58k15.5l1.9i0.07`
-- moduloB:    `a61d27g56j0.06m1`
+- moduloA:    `c28f58j0.06k15.5l1.9i0.07`
+- moduloB:    `a61d27g56m1`
 - moduloC:    `b62e28h42`
 
 I dati verranno salvati nella cartella DatiSensori nei seguenti files:
@@ -95,7 +95,7 @@ Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno
 ## ModuloA
 
 Esempio di dati inviati:
-`c28f58k15.5l1.9i0.07`
+`c28f58j0.06k15.5l1.9i0.07`
 
 | ID   | Descrizione                | Valore       |
 |------|----------------------------|--------------|
@@ -115,7 +115,7 @@ Esempio di dati inviati:
 ## ModuloB
 
 Esempio di dati inviati:
-`a61d27g56j0.06m1`
+`a61d27g56m1`
 
 | ID   | Descrizione                | Valore       |
 |------|----------------------------|--------------|
