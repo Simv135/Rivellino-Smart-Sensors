@@ -77,34 +77,18 @@ void readTempHum() {
   digitalWrite(DHT11_VCC_PIN, LOW);
 }
 
-// --- LETTURA BATTERIA ---
-void readBattery() {
-  ADCSRA = (1 << ADEN) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
-  ADMUX = (1 << REFS0) | (1 << MUX3) | (1 << MUX2) | (1 << MUX1);
-  delay(1);
-  ADCSRA |= (1 << ADSC);
-  while (bit_is_set(ADCSRA, ADSC));
-  int result = ADC;
-  ADCSRA |= (1 << ADSC);
-  while (bit_is_set(ADCSRA, ADSC));
-  result = ADC;
+// --- LETTURA BATTERIA --- //da completare
+void readBattery() {        //da completare
+  voltage = analogRead(A2); //da completare
 
-  voltage = 1148566UL / (unsigned long)result; // Vcc stimato
-
-  // Percentuale con correzione errore
-  if      (voltage >= 3437 && voltage < 3801) battery = 0;   //0.5 s x1
-  else if (voltage >= 3801 && voltage < 4165) battery = 20;  //0.5 s x2
-  else if (voltage >= 4165 && voltage < 4529) battery = 40;  //1 s x1
-  else if (voltage >= 4529 && voltage < 4893) battery = 60;  //1 s x2
-  else if (voltage >= 3893 && voltage < 5075) battery = 80;  //2 s x1
-  else if (voltage >= 5075)                   battery = 100; //2 s x2
+  // Percentuale batteria
+  if      (voltage < 4600) battery = 0;
+  else if (voltage < 4850) battery = 20;
+  else if (voltage < 4950) battery = 40;
+  else if (voltage < 5000) battery = 60;
+  else if (voltage < 5025) battery = 80;
+  else                     battery = 100;
 }
-//la misura va da 3,300V + errore a 5080 + errore quindi da 3,437V a 5,258
-//L'errore applicato agli estremi dell'intervallo applica un errore empirico ai valori mediani concorde con le misure prese
-//intervallo 3,300-5,080V diventa quindi 3,437V a 5,258 ed avendo diametro 1821 si hanno 5 sottointervalli da 364V
-//rispettivamente 3,438-3,802-4,166-4,530-4,894-5258, nota: si pone limite a 5075 perchè è il valore oltre cui
-//la batteria è oltre il 90% ed è quindi conveniente considerarla come pienamente carica.
-
 
 void powerStateLed(void){
   readBattery();
