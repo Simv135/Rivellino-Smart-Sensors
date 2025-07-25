@@ -135,7 +135,7 @@ void readBattery() {        //da completare
   else                     battery = 100;
 }
 
-void powerStateLed(void){
+void powerStateLed(){
   readBattery();
   if (battery==0){
     digitalWrite(LED_BATTERY, HIGH);
