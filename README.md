@@ -23,6 +23,8 @@ Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipoge
 
 <img width="1071" height="572" alt="schema-moduli" src="https://github.com/user-attachments/assets/4dd5736c-9acb-4d7d-bbe6-4dd24cb1500f" />
 
+<img width="2160" height="1208" alt="Mappa_Rivellino" src="https://github.com/user-attachments/assets/9a15419e-a349-405f-b95e-75f8a2fb708f" />
+
 
 | ID   | Descrizione                | Valore       | Modulo  |
 |------|----------------------------|--------------|---------|
