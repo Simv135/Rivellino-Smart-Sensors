@@ -2,10 +2,29 @@
 #include <Arduino_HS300x.h>
 #include <math.h>  // Per fabs() e isnan()
 
+// Librerie sensore aria
+#include <Wire.h>
+#include <Adafruit_ADS1X15.h>
+
+// Creazione dell'istanza dell'ADS1115
+Adafruit_ADS1X15 ads;
+
 // Costanti di configurazione
 #define VIBRATION_THRESHOLD 0.03            // Soglia variazione accelerazione per stampare
 #define VIBRATION_MIN_INTERVAL 50           // Minimo tempo tra rilevazioni valide (ms)
 #define ENV_INTERVAL 5000                   // Intervallo lettura temperatura/umidità (ms)
+
+// Variabili aria
+float R0_CO = 10.0;   // Resistenze in aria pulita
+float R0_NO2 = 20.0;  
+int16_t co_raw; // tensioni dai canali ADC
+int16_t no2_raw;
+float co_voltage; // valori raw in tensione (V)
+float no2_voltage;
+float R_s_CO; // resistenza del sensore (R_s)
+float R_s_NO2;
+float ppm_CO; // concentrazioni in ppm
+float ppm_NO2;
 
 // Variabili vibrazione
 float x, y, z;
@@ -34,6 +53,8 @@ void setup() {
   while (!Serial1);
   Serial.begin(9600);
   while (!Serial);
+
+  //ads.begin();
 
   if (!IMU.begin()) {
     Serial1.println("[A] Errore inizializzazione IMU!");
@@ -66,6 +87,7 @@ void loop() {
 
   if (currentMillis - lastEnvRead >= ENV_INTERVAL) {
     lastEnvRead = currentMillis;
+    //printAirData();
     printTempHumData();
   }
 
@@ -73,6 +95,7 @@ void loop() {
 }
 
 void receiveData() {
+
   if (Serial1.available()) {
     rawData = Serial1.readStringUntil('\n');  // Legge fino a newline
 
@@ -113,13 +136,34 @@ bool readAccelerometer() {
   return (!isnan(vibration) && frequencyVibration > 0.0 && frequencyVibration < 100.0);
 }
 
+void readAirQuality(){
+  co_raw = ads.readADC_SingleEnded(0);
+  no2_raw = ads.readADC_SingleEnded(1);
+  
+  // Conversione dei valori raw in tensione (V)
+  co_voltage = co_raw * 6.144 / 32768.0;
+  no2_voltage = no2_raw * 6.144 / 32768.0;
+  
+  // Calcolo della resistenza del sensore (R_s)
+  R_s_CO = (5.0 - co_voltage) / co_voltage * R0_CO;
+  R_s_NO2 = (5.0 - no2_voltage) / no2_voltage * R0_NO2;
+  
+  // Calcolo delle concentrazioni in ppm usando curve empiriche dal datasheet
+  ppm_CO = pow((R_s_CO / R0_CO), -1.179) * 4.385;   // Formula per CO
+  ppm_NO2 = pow((R_s_NO2 / R0_NO2), 1.007) * 6.855; // Formula per NO2
+}
+
+// Stampa dati aria
+void printAirData() {
+  readAirQuality();
+  Serial.print("i");  // Aria CO
+  Serial.print(ppm_CO);
+  Serial.print("j");  // Aria NO2
+  Serial.println(ppm_NO2);
+}
+
 // Stampa dati vibrazione
 void printVibrationData() {
-  Serial1.print("k");  // Frequenza (Hz)
-  Serial1.print(frequencyVibration, 2);
-  Serial1.print("l");  // Intensità vibrazione (m/s²)
-  Serial1.println(vibration, 2);
-
   Serial.print("k");  // Frequenza (Hz)
   Serial.print(frequencyVibration, 2);
   Serial.print("l");  // Intensità vibrazione (m/s²)
@@ -128,11 +172,6 @@ void printVibrationData() {
 
 // Stampa temperatura e umidità
 void printTempHumData() {
-  Serial1.print("c");  // Temperatura
-  Serial1.print(HS300x.readTemperature());
-  Serial1.print("f");  // Umidità
-  Serial1.println(HS300x.readHumidity());
-
   Serial.print("c");  // Temperatura
   Serial.print(HS300x.readTemperature());
   Serial.print("f");  // Umidità
