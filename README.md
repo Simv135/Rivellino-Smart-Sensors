@@ -26,10 +26,6 @@ Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipoge
 
 <br><br>
 
-<img width="2160" height="1208" alt="Mappa_Rivellino" src="https://github.com/user-attachments/assets/9a15419e-a349-405f-b95e-75f8a2fb708f"/>
-
-<br><br>
-
 | ID   | Descrizione                | Valore       | Modulo  |
 |------|----------------------------|--------------|---------|
 | a    | Batteria                   | %            | B       |
@@ -47,6 +43,12 @@ Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipoge
 | m    | Allagamento                | 0 / 1        | B       |
 
 I dati verranno elaborati dal ricevitore e salvati all'interno dei files CSV.
+
+<br><br>
+
+<img width="2160" height="1208" alt="Mappa_Rivellino" src="https://github.com/user-attachments/assets/9a15419e-a349-405f-b95e-75f8a2fb708f"/>
+
+<br><br>
 
 ## Il ricevitore
 
