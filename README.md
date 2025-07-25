@@ -92,6 +92,8 @@ Il file di configurazione `config.py` permette di modificare alcuni parametri re
 
 Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno di: `logfile.log`
 
+<br><br>
+
 ## ModuloA
 
 <img width="912" height="540" alt="image" src="https://github.com/user-attachments/assets/092ea132-b699-40a9-a8d6-75a042c1687d" />
