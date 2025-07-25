@@ -13,9 +13,9 @@
 
 // --- PIN ---
 #define DHT11_VCC_PIN         7
-#define DHT11_DATA_PIN        8
+#define DHT11_DATA_PIN        6
 #define HW038_VCC_PIN         2
-#define HW038_DATA_PIN        A0
+#define HW038_DATA_PIN        A3
 #define LED_BATTERY           11
 
 DHT dht11(DHT11_DATA_PIN, DHT11);
@@ -40,12 +40,16 @@ void setup() {
   pinMode(HW038_VCC_PIN, OUTPUT);
   digitalWrite(HW038_VCC_PIN, LOW);
 
-  Serial.begin(9600);
+  pinMode(4, OUTPUT);
+
+  Serial.begin(57600);
   while (!Serial);
 
   dht11.begin();
 
   setupWatchdog();
+
+  readBattery();
 
   powerStateLed();  //visualizza stato della batteria da led
 }
@@ -77,6 +81,8 @@ void loop() {
 
 // --- INVIO DATI ---
 void sendData(String data) {
+  digitalWrite(4, HIGH);
+  delay(3000);
   Serial.println(F("AT+MODE=0"));  // Wake
   delay(40);
   Serial.print(F("AT+SEND=1,"));
@@ -85,12 +91,19 @@ void sendData(String data) {
   Serial.println(data);
   delay(40);
   Serial.println(F("AT+MODE=1"));  // Sleep
+  delay(500);
+  if (Serial.available()) {
+    String rawData = Serial.readStringUntil('\n');  // Legge fino a newline
+    Serial.println(rawData);
+  }
+  delay(500);
+  digitalWrite(4, LOW);
 }
 
 // --- LETTURA TEMPERATURA / UMIDITÀ ---
 void readTempHum() {
   digitalWrite(DHT11_VCC_PIN, HIGH);
-  delay(1000);
+  delay(3000);
   temp = dht11.readTemperature();
   hum = dht11.readHumidity();
   digitalWrite(DHT11_VCC_PIN, LOW);
@@ -111,33 +124,18 @@ void readWater() {
   digitalWrite(HW038_VCC_PIN, LOW);
 }
 
-// --- LETTURA BATTERIA ---
-void readBattery() {
-  ADCSRA = (1 << ADEN) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
-  ADMUX = (1 << REFS0) | (1 << MUX3) | (1 << MUX2) | (1 << MUX1);
-  delay(1);
-  ADCSRA |= (1 << ADSC);
-  while (bit_is_set(ADCSRA, ADSC));
-  int result = ADC;
-  ADCSRA |= (1 << ADSC);
-  while (bit_is_set(ADCSRA, ADSC));
-  result = ADC;
+// --- LETTURA BATTERIA --- //da completare
+void readBattery() {        //da completare
+  voltage = analogRead(A2); //da completare
 
-  voltage = 1148566UL / (unsigned long)result; // Vcc stimato
-
-   // Percentuale con correzione errore
-  if      (voltage >= 3437 && voltage < 3801) battery = 0;   //0.5 s x1
-  else if (voltage >= 3801 && voltage < 4165) battery = 20;  //0.5 s x2
-  else if (voltage >= 4165 && voltage < 4529) battery = 40;  //1 s x1
-  else if (voltage >= 4529 && voltage < 4893) battery = 60;  //1 s x2
-  else if (voltage >= 3893 && voltage < 5075) battery = 80;  //2 s x1
-  else if (voltage >= 5075)                   battery = 100; //2 s x2
+  // Percentuale batteria
+  if      (voltage < 4600) battery = 0;
+  else if (voltage < 4850) battery = 20;
+  else if (voltage < 4950) battery = 40;
+  else if (voltage < 5000) battery = 60;
+  else if (voltage < 5025) battery = 80;
+  else                     battery = 100;
 }
-//la misura va da 3,300V + errore a 5080 + errore quindi da 3,437V a 5,258
-//L'errore applicato agli estremi dell'intervallo applica un errore empirico ai valori mediani concorde con le misure prese
-//intervallo 3,300-5,080V diventa quindi 3,437V a 5,258 ed avendo diametro 1821 si hanno 5 sottointervalli da 364V
-//rispettivamente 3,438-3,802-4,166-4,530-4,894-5258, nota: si pone limite a 5075 perchè è il valore oltre cui
-//la batteria è oltre il 90% ed è quindi conveniente considerarla come pienamente carica.
 
 void powerStateLed(void){
   readBattery();
@@ -216,3 +214,4 @@ void sleepUntilNextReading() {
   } while (!time_to_read_temp_hum && !time_to_read_water);
   ADCSRA |= (1 << ADEN);
 }
+  
