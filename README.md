@@ -15,7 +15,7 @@ I sensori installati nei tre moduli principali — **Tirante (A)**, **Galleria (
 Questi dati vengono trasmessi via seriale ad un Raspberry Pi e letti da un ricevitore scritto in Python, che li elabora e li salva automaticamente in file CSV.  
 Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipogei, contribuendo alla **tutela e alla conservazione del patrimonio storico**.
 
-I moduli:
+## I moduli
 - A → tirante (Temperatura e Umidità, Aria, Vibrazioni)
 - B → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
 - C → polveriera (Batterie, Temperatura e Umidità)
@@ -38,7 +38,7 @@ I moduli:
 
 I dati verranno elaborati dal ricevitore e salvati all'interno dei files CSV.
 
-# Ricevitore:
+# Il ricevitore
 
 Assicurarsi di avere l'ultima versione di Python3 installata sul dispositivo.
 
