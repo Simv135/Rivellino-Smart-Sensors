@@ -17,8 +17,8 @@ Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipoge
 
 ## I moduli
 - [A](#ModuloA) → tirante (Temperatura e Umidità, Aria, Vibrazioni)
-- B → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
-- C → polveriera (Batterie, Temperatura e Umidità)
+- [B](#ModuloB) → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
+- [C](#ModuloC) → polveriera (Batterie, Temperatura e Umidità)
 
 | ID   | Descrizione                | Valore       | Modulo  |
 |------|----------------------------|--------------|---------|
