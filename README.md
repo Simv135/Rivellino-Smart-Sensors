@@ -100,6 +100,12 @@ Esempio di dati inviati:
 | k    | Vibrazioni                 | Hz           |
 | l    | Vibrazioni                 | m/s²         |
 
+<br><br>
+
+<img width="912" height="540" alt="image" src="https://github.com/user-attachments/assets/092ea132-b699-40a9-a8d6-75a042c1687d" />
+
+<br><br>
+
 ## ModuloB
 
 Esempio di dati inviati:
@@ -112,6 +118,12 @@ Esempio di dati inviati:
 | g    | Umidità                    | %            |
 | m    | Allagamento                | 0 / 1        |
 
+<br><br>
+
+<img width="986" height="530" alt="image" src="https://github.com/user-attachments/assets/2a0e6bcc-ffef-49de-8ba9-27df456c938a" />
+
+<br><br>
+
 ## ModuloC
 
 Esempio di dati inviati:
@@ -122,3 +134,9 @@ Esempio di dati inviati:
 | b    | Batteria                   | %            |
 | e    | Temperatura                | °C           |
 | h    | Umidità                    | %            |
+
+<br><br>
+
+<img width="897" height="520" alt="image" src="https://github.com/user-attachments/assets/401373b9-26b6-440e-ab7c-1bd358575cdf" />
+
+<br><br>
