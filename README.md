@@ -85,6 +85,8 @@ Esempio di dati inviati:
 |------|----------------------------|--------------|
 | c    | Temperatura                | °C           |
 | f    | Umidità                    | %            |
+| i    | Aria (CO)                  | ppm          |
+| j    | Aria (NO2)                 | ppm          |
 | k    | Vibrazioni                 | Hz           |
 | l    | Vibrazioni                 | m/s²         |
 
@@ -98,8 +100,6 @@ Esempio di dati inviati:
 | a    | Batteria                   | %            |
 | d    | Temperatura                | °C           |
 | g    | Umidità                    | %            |
-| i    | Aria (CO)                  | ppm          |
-| j    | Aria (NO2)                 | ppm          |
 | m    | Allagamento                | 0 / 1        |
 
 ## ModuloC
