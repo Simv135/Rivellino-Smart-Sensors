@@ -1,8 +1,8 @@
-# Sensori Rivellino
+# Rivellino Smart Sensors
 
 ## Introduzione
 
-Il sistema **Sensori Rivellino** è progettato per monitorare le condizioni ambientali all'interno del *Rivellino degli Invalidi*, parte del **Museo Pietro Micca** di Torino.  
+Il sistema **Rivellino Smart Sensors** è progettato per monitorare le condizioni ambientali all'interno del ***Rivellino degli Invalidi***, parte del **Museo Pietro Micca** di Torino.  
 I sensori installati nei tre moduli principali — **Tirante (A)**, **Galleria (B)** e **Polveriera (C)** — raccolgono dati su:
 
 - Temperatura  
@@ -16,7 +16,7 @@ Questi dati vengono trasmessi via seriale ad un Raspberry Pi e letti da un ricev
 Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipogei, contribuendo alla **tutela e alla conservazione del patrimonio storico**.
 
 ## I moduli
-- A → tirante (Temperatura e Umidità, Aria, Vibrazioni)
+- [A](#ModuloA) → tirante (Temperatura e Umidità, Aria, Vibrazioni)
 - B → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
 - C → polveriera (Batterie, Temperatura e Umidità)
 
