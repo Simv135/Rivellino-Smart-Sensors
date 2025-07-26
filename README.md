@@ -59,7 +59,7 @@ Assicurarsi di avere l'ultima versione di Python3 installata sul dispositivo (in
 
 Eseguire ```pip install pyserial``` nel terminale per installare la libreria pyserial.
 
-Eseguire ```Python3 main.py``` nel terminale, all'interno della cartella in cui si trova il programma ricevitore.
+Eseguire ```python3 main.py``` nel terminale, all'interno della cartella in cui si trova il programma ricevitore.
 
 Il programma proverà a connettersi alla porta seriale. Quando la connessione sarà stabilita verrà mostrata la porta utilizzata e la velocità di comunicazione impostata.
 
