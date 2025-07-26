@@ -16,10 +16,10 @@ Questi dati vengono trasmessi via seriale ad un Raspberry Pi e letti da un ricev
 Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipogei, contribuendo alla **tutela e alla conservazione del patrimonio storico**.
 
 ## I moduli
-0. [Modulo Ricevitore](#il-ricevitore) per l'elaborazione dei dati - Raspberry pi 4
-1. [Modulo A](#1-ModuloA) → tirante (Temperatura e Umidità, Aria, Vibrazioni) - Arduino Nano 33 BLE Sense Rev2
-2. [Modulo B](#2-ModuloB) → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento) - Arduino Pro Mini
-3. [Modulo C](#3-ModuloC) → polveriera (Batterie, Temperatura e Umidità) - Arduino Pro Mini
+0. [Modulo Ricevitore](#il-ricevitore) per l'elaborazione dei dati
+1. [Modulo A](#1-ModuloA) → tirante (Temperatura e Umidità, Aria, Vibrazioni)
+2. [Modulo B](#2-ModuloB) → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
+3. [Modulo C](#3-ModuloC) → polveriera (Batterie, Temperatura e Umidità)
 
 <img width="1071" height="572" alt="schema-moduli" src="https://github.com/user-attachments/assets/4dd5736c-9acb-4d7d-bbe6-4dd24cb1500f"/>
 
