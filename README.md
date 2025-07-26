@@ -129,6 +129,7 @@ Esempio di dati inviati:
 - Sensore Temperatura e Umidità DHT11
 - Sensore Allagamento HW-038
 - Modulo LoRa RYLR498
+- Batterie AA Alcaline x5 (serie)
 
 Esempio di dati inviati:
 `a61d27g56m1`
@@ -152,6 +153,7 @@ Esempio di dati inviati:
 - Arduino Pro Mini
 - Sensore Temperatura e Umidità DHT11
 - Modulo LoRa RYLR498
+- Batterie AA Alcaline x5 (serie)
 
 Esempio di dati inviati:
 `b62e28h42`
