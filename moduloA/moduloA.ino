@@ -12,7 +12,7 @@ Adafruit_ADS1X15 ads;
 // Costanti di configurazione
 #define VIBRATION_THRESHOLD 0.03            // Soglia variazione accelerazione per stampare
 #define VIBRATION_MIN_INTERVAL 50           // Minimo tempo tra rilevazioni valide (ms)
-#define ENV_INTERVAL 5000                   // Intervallo lettura temperatura/umidità (ms) e aria
+#define ENV_INTERVAL 5000                   // Intervallo lettura temperatura/umidità e aria (ms)
 
 // Variabili aria
 float R0_CO = 10.0;   // Resistenze in aria pulita
@@ -58,11 +58,13 @@ void setup() {
 
   if (!IMU.begin()) {
     Serial1.println("[A] Errore inizializzazione IMU!");
+    Serial.println("[A] Errore inizializzazione IMU!");
     while (1);
   }
 
   if (!HS300x.begin()) {
     Serial1.println("[A] Errore inizializzazione sensore HS300x!");
+    Serial.println("[A] Errore inizializzazione sensore HS300x!");
     while (1);
   }
 }
