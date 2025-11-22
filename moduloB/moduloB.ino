@@ -17,6 +17,7 @@
 #define HW038_VCC_PIN         2
 #define HW038_DATA_PIN        A3
 #define LED_BATTERY           11
+#define LORA_VCC_PIN          4
 
 DHT dht11(DHT11_DATA_PIN, DHT11);
 
@@ -40,10 +41,19 @@ void setup() {
   pinMode(HW038_VCC_PIN, OUTPUT);
   digitalWrite(HW038_VCC_PIN, LOW);
 
-  pinMode(4, OUTPUT);
+  pinMode(LORA_VCC_PIN, OUTPUT);
 
-  Serial.begin(57600);
+  Serial.begin(9600);
   while (!Serial);
+
+  //Imposta la velocità di trasmissione sul modulo Lora
+  digitalWrite(LORA_VCC_PIN, HIGH);
+  delay(3000);
+  Serial.println(F("AT+IPR=9600"));
+  delay(500);
+  Serial.println(F("AT+IPR?"));
+  delay(500);
+  digitalWrite(LORA_VCC_PIN, HIGH);
 
   dht11.begin();
 
@@ -79,7 +89,7 @@ void loop() {
 
 // --- INVIO DATI ---
 void sendData(String data) {
-  digitalWrite(4, HIGH);
+  digitalWrite(LORA_VCC_PIN, HIGH);
   delay(3000);
   Serial.println(F("AT+MODE=0"));  // Wake
   delay(40);
@@ -95,7 +105,7 @@ void sendData(String data) {
     Serial.println(rawData);
   }
   delay(500);
-  digitalWrite(4, LOW);
+  digitalWrite(LORA_VCC_PIN, LOW);
 }
 
 // --- LETTURA TEMPERATURA / UMIDITÀ ---
@@ -213,3 +223,4 @@ void sleepUntilNextReading() {
   ADCSRA |= (1 << ADEN);
 }
   
+
