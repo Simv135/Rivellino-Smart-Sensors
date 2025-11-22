@@ -12,12 +12,9 @@
 #define WATER_THRESHOLD       10    // Soglia allagamento
 
 // --- PIN ---
-#define DHT11_VCC_PIN         7
 #define DHT11_DATA_PIN        6
-#define HW038_VCC_PIN         2
 #define HW038_DATA_PIN        A3
 #define LED_BATTERY           11
-#define LORA_VCC_PIN          4
 
 DHT dht11(DHT11_DATA_PIN, DHT11);
 
@@ -35,25 +32,14 @@ volatile bool time_to_read_water = false;
 
 // --- SETUP ---
 void setup() {
-  pinMode(DHT11_VCC_PIN, OUTPUT);
-  digitalWrite(DHT11_VCC_PIN, LOW);
-
-  pinMode(HW038_VCC_PIN, OUTPUT);
-  digitalWrite(HW038_VCC_PIN, LOW);
-
-  pinMode(LORA_VCC_PIN, OUTPUT);
-
   Serial.begin(9600);
   while (!Serial);
 
   //Imposta la velocità di trasmissione sul modulo Lora
-  digitalWrite(LORA_VCC_PIN, HIGH);
-  delay(3000);
   Serial.println(F("AT+IPR=9600"));
   delay(500);
   Serial.println(F("AT+IPR?"));
   delay(500);
-  digitalWrite(LORA_VCC_PIN, HIGH);
 
   dht11.begin();
 
@@ -89,8 +75,6 @@ void loop() {
 
 // --- INVIO DATI ---
 void sendData(String data) {
-  digitalWrite(LORA_VCC_PIN, HIGH);
-  delay(3000);
   Serial.println(F("AT+MODE=0"));  // Wake
   delay(40);
   Serial.print(F("AT+SEND=1,"));
@@ -104,24 +88,16 @@ void sendData(String data) {
     String rawData = Serial.readStringUntil('\n');  // Legge fino a newline
     Serial.println(rawData);
   }
-  delay(500);
-  digitalWrite(LORA_VCC_PIN, LOW);
 }
 
 // --- LETTURA TEMPERATURA / UMIDITÀ ---
 void readTempHum() {
-  digitalWrite(DHT11_VCC_PIN, HIGH);
-  delay(3000);
   temp = dht11.readTemperature();
   hum = dht11.readHumidity();
-  digitalWrite(DHT11_VCC_PIN, LOW);
 }
 
 // --- LETTURA ALLAGAMENTO ---
 void readWater() {
-  digitalWrite(HW038_VCC_PIN, HIGH);
-  delay(5);
-
   int count = 0;
   for (byte i = 0; i < 5; i++) {
     count += (analogRead(HW038_DATA_PIN) >= WATER_THRESHOLD);
@@ -129,7 +105,6 @@ void readWater() {
   }
 
   all = (count >= 3);
-  digitalWrite(HW038_VCC_PIN, LOW);
 }
 
 // --- LETTURA BATTERIA --- //da completare
@@ -223,4 +198,5 @@ void sleepUntilNextReading() {
   ADCSRA |= (1 << ADEN);
 }
   
+
 
