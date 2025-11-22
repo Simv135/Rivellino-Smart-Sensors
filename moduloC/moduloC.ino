@@ -10,8 +10,7 @@
 #define TEMP_HUM_CYCLES       4     // Leggi ogni 32s
 
 // --- PIN ---
-#define DHT11_VCC_PIN         7
-#define DHT11_DATA_PIN        8
+#define DHT11_DATA_PIN        9
 #define LED_BATTERY           11
 
 DHT dht11(DHT11_DATA_PIN, DHT11);
@@ -27,11 +26,18 @@ volatile bool time_to_read_temp_hum = false;
 
 // --- SETUP ---
 void setup() {
-  pinMode(DHT11_VCC_PIN, OUTPUT);
-  digitalWrite(DHT11_VCC_PIN, LOW);
-
   Serial.begin(9600);
   while (!Serial);
+
+  //Imposta la velocità di trasmissione sul modulo Lora
+  Serial.println(F("AT+IPR=9600"));
+  delay(500);
+  Serial.println(F("AT+IPR?"));
+  delay(500);
+  if (Serial.available()) {
+    String rawData = Serial.readStringUntil('\n');  // Legge fino a newline
+    Serial.println(rawData);
+  }
 
   dht11.begin();
 
@@ -66,15 +72,17 @@ void sendData(String data) {
   Serial.println(data);
   delay(40);
   Serial.println(F("AT+MODE=1"));  // Sleep
+  delay(500);
+  if (Serial.available()) {
+    String rawData = Serial.readStringUntil('\n');  // Legge fino a newline
+    Serial.println(rawData);
+  }
 }
 
 // --- LETTURA TEMPERATURA / UMIDITÀ ---
 void readTempHum() {
-  digitalWrite(DHT11_VCC_PIN, HIGH);
-  delay(1000);
   temp = dht11.readTemperature();
   hum = dht11.readHumidity();
-  digitalWrite(DHT11_VCC_PIN, LOW);
 }
 
 // --- LETTURA BATTERIA --- //da completare
@@ -161,3 +169,4 @@ void sleepUntilNextReading() {
   } while (!time_to_read_temp_hum);
   ADCSRA |= (1 << ADEN);
 }
+
