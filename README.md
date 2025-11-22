@@ -53,7 +53,7 @@ I dati verranno elaborati dal ricevitore e salvati all'interno dei files CSV.
 
 ## Il ricevitore
 
-Assicurarsi di avere l'ultima versione di Python3 installata sul dispositivo (in questo caso sul Raspberry Pi 4).
+Assicurarsi di avere l'ultima versione di Python3 installata sul dispositivo (in questo caso sul Raspberry Pi 5).
 
 Eseguire ```pip install pyserial``` nel terminale per installare la libreria pyserial.
 
