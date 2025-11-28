@@ -92,6 +92,21 @@ Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno
 ## Librerie Arduino
 Estrarre `libraries.zip` all'interno della cartella `C:\Users\%USERPROFILE%\Documents\Arduino\`, riavviare eventualmente Arduino IDE
 
+## Configurazione LoRa
+Tramite interfaccia USB to TTL:
+- Lora Modulo A
+-- `AT+ADDRESS=1`
+-- `AT+NETWORKID=5`
+-- `AT+IPR=9600`
+- Lora Modulo B
+-- `AT+ADDRESS=2`
+-- `AT+NETWORKID=5`
+-- `AT+IPR=9600`
+- Lora Modulo C
+-- `AT+ADDRESS=3`
+-- `AT+NETWORKID=5`
+-- `AT+IPR=9600`
+
 ## 1. ModuloA
 
 <img width="912" height="540" alt="image" src="https://github.com/user-attachments/assets/092ea132-b699-40a9-a8d6-75a042c1687d" />
