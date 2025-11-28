@@ -1,10 +1,16 @@
+//Estrarre "libraries.zip" e inserire le librerie all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino", riavviare eventualmente Arduino IDE
+//impostare usb to ttl con vdd a 5V
+//collegare VDD e GND
+//collegare tx(usb to ttl) con rx(Arduino) ed rx(usb to ttl) con tx(Arduino)
+//premere il pulsante di reset subito dopo la compilazione del codice per caricare il codice sul Pro Mini e non collegare il pin di reset
+//Per info: https://github.com/Simv135/Rivellino-Smart-Sensors
+
 // --- LIBRERIE ---
-//Estrarre "libraries.zip" e inserire le librerie all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino"
 #include <Wire.h>
 #include "DHT.h"
 #include <avr/sleep.h>
 #include <avr/power.h>
-#include <avr/wdt.h>
+#include <avr/wdt.h> 
 
 // --- CONFIGURAZIONI ---
 #define WDT_INTERVAL          8     // Ogni ciclo WDT è 8s
@@ -12,6 +18,8 @@
 
 // --- PIN ---
 #define DHT11_DATA_PIN        9
+#define BATTERY_READ_EN       5
+#define BATTERY_READ_PIN      A2
 #define LED_BATTERY           11    //da completare il circuito con il LED nel circuito
 
 DHT dht11(DHT11_DATA_PIN, DHT11);
@@ -30,6 +38,8 @@ void setup() {
   Serial.begin(9600);
   while (!Serial);
 
+  pinMode(BATTERY_READ_EN,OUTPUT);
+
   dht11.begin();
 
   setupWatchdog();
@@ -46,9 +56,9 @@ void loop() {
     readTempHum();
     readBattery();
     sendData(
-      "d" + String(temp) + 
-      "g" + String(hum) + 
-      "a" + String(battery)
+      "e" + String(temp) + 
+      "h" + String(hum) + 
+      "b" + String(battery)
     );
     time_to_read_temp_hum = false;
   }
@@ -76,7 +86,10 @@ void readTempHum() {
 
 // --- LETTURA BATTERIA ---
 void readBattery() {
-  voltage = analogRead(A2);
+  digitalWrite(BATTERY_READ_EN,HIGH);
+  delay(1000);
+  voltage = analogRead(BATTERY_READ_PIN);
+  digitalWrite(BATTERY_READ_EN,LOW);
 
   //da calcolare meglio le soglie in base al partitore di tensione nel circuito
   //                   ^
