@@ -1,4 +1,4 @@
-# config.py
+# Per info: https://github.com/Simv135/Rivellino-Smart-Sensors
 
 # Connessione porta COM
 # PORT = None    →  Selezione automatica della prima porta disponibile
@@ -63,4 +63,5 @@ LOG_MESSAGES = {
     'comm_error': '[ERROR] Errore di comunicazione',
     'terminated': "[INFO] Programma terminato dall'utente"
 }
+
 
