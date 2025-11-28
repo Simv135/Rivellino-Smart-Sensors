@@ -1,3 +1,5 @@
+// --- LIBRERIE ---
+//Estrarre "libraries.zip" e inserire le librerie all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino"
 #include "Arduino_BMI270_BMM150.h"
 #include <Arduino_HS300x.h>
 #include <math.h>  // Per fabs() e isnan()
@@ -162,10 +164,6 @@ void printAirData() {
   Serial.print(ppm_CO);
   Serial.print("j");  // Aria NO2
   Serial.println(ppm_NO2);
-  Serial1.print("i");  // Aria CO
-  Serial1.print(ppm_CO);
-  Serial1.print("j");  // Aria NO2
-  Serial1.println(ppm_NO2);
 }
 
 // Stampa dati vibrazione
@@ -174,10 +172,6 @@ void printVibrationData() {
   Serial.print(frequencyVibration, 2);
   Serial.print("l");  // Intensità vibrazione (m/s²)
   Serial.println(vibration, 2);
-  Serial1.print("k");  // Frequenza (Hz)
-  Serial1.print(frequencyVibration, 2);
-  Serial1.print("l");  // Intensità vibrazione (m/s²)
-  Serial1.println(vibration, 2);
 }
 
 // Stampa temperatura e umidità
@@ -186,8 +180,4 @@ void printTempHumData() {
   Serial.print(HS300x.readTemperature());
   Serial.print("f");  // Umidità
   Serial.println(HS300x.readHumidity());
-  Serial1.print("c");  // Temperatura
-  Serial1.print(HS300x.readTemperature());
-  Serial1.print("f");  // Umidità
-  Serial1.println(HS300x.readHumidity());
 }
