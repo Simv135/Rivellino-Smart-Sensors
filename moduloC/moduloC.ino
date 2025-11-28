@@ -1,4 +1,5 @@
 // --- LIBRERIE ---
+//Estrarre "libraries.zip" e inserire le librerie all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino"
 #include <Wire.h>
 #include "DHT.h"
 #include <avr/sleep.h>
@@ -7,11 +8,11 @@
 
 // --- CONFIGURAZIONI ---
 #define WDT_INTERVAL          8     // Ogni ciclo WDT è 8s
-#define TEMP_HUM_CYCLES       4     // Leggi ogni 32s
+#define TEMP_HUM_CYCLES       4     // Leggi ogni 32s Temperatura e Umidità
 
 // --- PIN ---
 #define DHT11_DATA_PIN        9
-#define LED_BATTERY           11
+#define LED_BATTERY           11    //da completare il circuito con il LED nel circuito
 
 DHT dht11(DHT11_DATA_PIN, DHT11);
 
@@ -29,21 +30,12 @@ void setup() {
   Serial.begin(9600);
   while (!Serial);
 
-  //Imposta la velocità di trasmissione sul modulo Lora
-  Serial.println(F("AT+IPR=9600"));
-  delay(500);
-  Serial.println(F("AT+IPR?"));
-  delay(500);
-  if (Serial.available()) {
-    String rawData = Serial.readStringUntil('\n');  // Legge fino a newline
-    Serial.println(rawData);
-  }
-
   dht11.begin();
 
   setupWatchdog();
 
-  powerStateLed();  //visualizza stato della batteria da led
+  powerStateLed();  //visualizza stato della batteria partendo dal LED
+  //Implementare un pulsante di reset per visualizzare lo stato della batteria manualmente
 }
 
 // --- LOOP PRINCIPALE ---
@@ -64,19 +56,16 @@ void loop() {
 
 // --- INVIO DATI ---
 void sendData(String data) {
-  Serial.println(F("AT+MODE=0"));  // Wake
-  delay(40);
-  Serial.print(F("AT+SEND=1,"));
+  Serial.println("AT+MODE=0"); //sleep off
+  delay(500);
+
+  Serial.print("AT+SEND=1,");
   Serial.print(data.length());
   Serial.print(",");
   Serial.println(data);
-  delay(40);
-  Serial.println(F("AT+MODE=1"));  // Sleep
-  delay(500);
-  if (Serial.available()) {
-    String rawData = Serial.readStringUntil('\n');  // Legge fino a newline
-    Serial.println(rawData);
-  }
+
+  delay(1000);
+  Serial.println("AT+MODE=1"); //sleep on
 }
 
 // --- LETTURA TEMPERATURA / UMIDITÀ ---
@@ -85,11 +74,13 @@ void readTempHum() {
   hum = dht11.readHumidity();
 }
 
-// --- LETTURA BATTERIA --- //da completare
-void readBattery() {        //da completare
-  voltage = analogRead(A2); //da completare
+// --- LETTURA BATTERIA ---
+void readBattery() {
+  voltage = analogRead(A2);
 
-  // Percentuale batteria
+  //da calcolare meglio le soglie in base al partitore di tensione nel circuito
+  //                   ^
+  //                   |
   if      (voltage < 4600) battery = 0;
   else if (voltage < 4850) battery = 20;
   else if (voltage < 4950) battery = 40;
@@ -98,6 +89,8 @@ void readBattery() {        //da completare
   else                     battery = 100;
 }
 
+// --- LED BATTERIA ---
+//Indicatore LED per lo stato della batteria
 void powerStateLed(){
   readBattery();
   if (battery==0){
