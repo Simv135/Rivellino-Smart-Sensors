@@ -1,5 +1,7 @@
+//Estrarre "libraries.zip" e inserire le librerie all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino", riavviare eventualmente Arduino IDE
+//Per info: https://github.com/Simv135/Rivellino-Smart-Sensors
+
 // --- LIBRERIE ---
-//Estrarre "libraries.zip" e inserire le librerie all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino"
 #include "Arduino_BMI270_BMM150.h"
 #include <Arduino_HS300x.h>
 #include <math.h>  // Per fabs() e isnan()
