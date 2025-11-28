@@ -1,5 +1,11 @@
+//Estrarre "libraries.zip" e inserire le librerie all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino", riavviare eventualmente Arduino IDE
+//impostare usb to ttl con vdd a 5V
+//collegare VDD e GND
+//collegare tx(usb to ttl) con rx(Arduino) ed rx(usb to ttl) con tx(Arduino)
+//premere il pulsante di reset subito dopo la compilazione del codice per caricare il codice sul Pro Mini e non collegare il pin di reset
+//Per info: https://github.com/Simv135/Rivellino-Smart-Sensors
+
 // --- LIBRERIE ---
-//Estrarre "libraries.zip" e inserire le librerie all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino"
 #include <Wire.h>
 #include "DHT.h"
 #include <avr/sleep.h>
@@ -15,6 +21,8 @@
 // --- PIN ---
 #define DHT11_DATA_PIN        6
 #define HW038_DATA_PIN        A3
+#define BATTERY_READ_EN       2
+#define BATTERY_READ_PIN      A2
 #define LED_BATTERY           11  //da completare il circuito con il LED nel circuito
 
 DHT dht11(DHT11_DATA_PIN, DHT11);
@@ -35,6 +43,8 @@ volatile bool time_to_read_water = false;
 void setup() {
   Serial.begin(9600);
   while (!Serial);
+
+  pinMode(BATTERY_READ_EN,OUTPUT);
 
   dht11.begin();
 
@@ -102,7 +112,10 @@ void readWater() {
 
 // --- LETTURA BATTERIA ---
 void readBattery() {
-  voltage = analogRead(A2);
+  digitalWrite(BATTERY_READ_EN,HIGH);
+  delay(1000);
+  voltage = analogRead(BATTERY_READ_PIN);
+  digitalWrite(BATTERY_READ_EN,LOW);
 
   //da calcolare meglio le soglie in base al partitore di tensione nel circuito
   //                   ^
