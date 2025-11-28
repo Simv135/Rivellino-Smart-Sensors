@@ -1,4 +1,4 @@
-//Estrarre "libraries.zip" e inserire le librerie all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino", riavviare eventualmente Arduino IDE
+//Estrarre "libraries.zip" all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino\", riavviare eventualmente Arduino IDE
 //Per info: https://github.com/Simv135/Rivellino-Smart-Sensors
 
 // --- LIBRERIE ---
@@ -183,3 +183,4 @@ void printTempHumData() {
   Serial.print("f");  // Umidità
   Serial.println(HS300x.readHumidity());
 }
+
