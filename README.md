@@ -95,17 +95,17 @@ Estrarre `libraries.zip` all'interno della cartella `C:\Users\%USERPROFILE%\Docu
 ## Configurazione LoRa
 Tramite interfaccia USB to TTL:
 - Lora Modulo A
--- `AT+ADDRESS=1`
--- `AT+NETWORKID=5`
--- `AT+IPR=9600`
+  - `AT+ADDRESS=1`
+  - `AT+NETWORKID=5`
+  - `AT+IPR=9600`
 - Lora Modulo B
--- `AT+ADDRESS=2`
--- `AT+NETWORKID=5`
--- `AT+IPR=9600`
+  - `AT+ADDRESS=2`
+  - `AT+NETWORKID=5`
+  - `AT+IPR=9600`
 - Lora Modulo C
--- `AT+ADDRESS=3`
--- `AT+NETWORKID=5`
--- `AT+IPR=9600`
+  - `AT+ADDRESS=3`
+  - `AT+NETWORKID=5`
+  - `AT+IPR=9600`
 
 ## 1. ModuloA
 
