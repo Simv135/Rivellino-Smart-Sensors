@@ -1,4 +1,4 @@
-//Estrarre "libraries.zip" e inserire le librerie all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino", riavviare eventualmente Arduino IDE
+//Estrarre "libraries.zip" all'interno della cartella "C:\Users\%USERPROFILE%\Documents\Arduino\", riavviare eventualmente Arduino IDE
 //impostare usb to ttl con vdd a 5V
 //collegare VDD e GND
 //collegare tx(usb to ttl) con rx(Arduino) ed rx(usb to ttl) con tx(Arduino)
@@ -208,5 +208,6 @@ void sleepUntilNextReading() {
   ADCSRA |= (1 << ADEN);
 }
   
+
 
 
