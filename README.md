@@ -89,7 +89,7 @@ Il file di configurazione `config.py` permette di modificare alcuni parametri re
 
 Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno di: `logfile.log`
 
-## --- LIBRERIE ---
+## Librerie Arduino
 Estrarre `libraries.zip` e inserire le librerie all'interno della cartella `C:\Users\%USERPROFILE%\Documents\Arduino`
 
 ## 1. ModuloA
