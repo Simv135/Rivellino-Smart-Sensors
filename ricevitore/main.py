@@ -1,4 +1,4 @@
-# main.py
+# Per info: https://github.com/Simv135/Rivellino-Smart-Sensors
 
 ### Librerie necessarie ###
 #   la libreria serial è necessario installarla con il comando: "pip install pyserial"
@@ -139,3 +139,4 @@ if __name__ == '__main__':
             break
         except Exception as e:
             printLOG(e)
+
