@@ -19,7 +19,7 @@ Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipoge
 - [Modulo B](#Modulo-B) → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
 - [Modulo C](#Modulo-C) → polveriera (Batterie, Temperatura e Umidità)
 
-<img width="1071" height="572" alt="schema-moduli" src="https://github.com/user-attachments/assets/4dd5736c-9acb-4d7d-bbe6-4dd24cb1500f"/>
+<img width="1580" height="854" alt="diagramma_funzionale" src="https://github.com/user-attachments/assets/adbd03e2-59d2-45a6-bc90-2eb4d45d66fc" />
 
 <br><br>
 
