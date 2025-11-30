@@ -14,10 +14,10 @@ Questi dati vengono trasmessi via seriale ad un Raspberry Pi e letti da un ricev
 Il sistema garantisce un monitoraggio continuo e affidabile degli ambienti ipogei, contribuendo alla **tutela e alla conservazione del patrimonio storico**.
 
 ## I moduli
-0. [Modulo Ricevitore](#il-ricevitore) per l'elaborazione dei dati
-1. [Modulo A](#1-ModuloA) → tirante (Temperatura e Umidità, Aria, Vibrazioni)
-2. [Modulo B](#2-ModuloB) → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
-3. [Modulo C](#3-ModuloC) → polveriera (Batterie, Temperatura e Umidità)
+- [Modulo Ricevitore](#Il-ricevitore) per l'elaborazione dei dati
+- [Modulo A](#Modulo-A) → tirante (Temperatura e Umidità, Aria, Vibrazioni)
+- [Modulo B](#Modulo-B) → galleria (Batterie, Temperatura e Umidità, Aria, Allagamento)
+- [Modulo C](#Modulo-C) → polveriera (Batterie, Temperatura e Umidità)
 
 <img width="1071" height="572" alt="schema-moduli" src="https://github.com/user-attachments/assets/4dd5736c-9acb-4d7d-bbe6-4dd24cb1500f"/>
 
@@ -106,7 +106,7 @@ Estrarre `libraries.zip` all'interno della cartella `C:\Users\%USERPROFILE%\Docu
   - `AT+NETWORKID=5`
   - `AT+IPR=9600`
 
-## 1. Modulo A
+## Modulo A
 
 <img width="602" height="662" alt="ModuloA" src="https://github.com/user-attachments/assets/75a2bb8d-df2d-480f-bab2-1d8166e463b7" />
 
@@ -131,7 +131,7 @@ Esempio di dati inviati:
 
 <br><br>
 
-## 2. Modulo B
+## Modulo B
 
 <img width="901" height="716" alt="ModuloB" src="https://github.com/user-attachments/assets/7d79e3ab-da4b-4317-91d7-e6963c3c493e" />
 
@@ -156,7 +156,7 @@ Esempio di dati inviati:
 
 <br><br>
 
-## 3. Modulo C
+## Modulo C
 
 <img width="792" height="723" alt="ModuloC" src="https://github.com/user-attachments/assets/f7f4e038-95c8-4f98-9709-067d31cbaec1" />
 
