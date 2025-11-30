@@ -106,7 +106,7 @@ Estrarre `libraries.zip` all'interno della cartella `C:\Users\%USERPROFILE%\Docu
   - `AT+NETWORKID=5`
   - `AT+IPR=9600`
 
-## 1. ModuloA
+## 1. Modulo A
 
 <img width="602" height="662" alt="ModuloA" src="https://github.com/user-attachments/assets/75a2bb8d-df2d-480f-bab2-1d8166e463b7" />
 
@@ -131,7 +131,7 @@ Esempio di dati inviati:
 
 <br><br>
 
-## 2. ModuloB
+## 2. Modulo B
 
 <img width="901" height="716" alt="ModuloB" src="https://github.com/user-attachments/assets/7d79e3ab-da4b-4317-91d7-e6963c3c493e" />
 
@@ -156,7 +156,7 @@ Esempio di dati inviati:
 
 <br><br>
 
-## 3. ModuloC
+## 3. Modulo C
 
 <img width="792" height="723" alt="ModuloC" src="https://github.com/user-attachments/assets/f7f4e038-95c8-4f98-9709-067d31cbaec1" />
 
