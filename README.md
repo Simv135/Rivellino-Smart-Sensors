@@ -133,7 +133,7 @@ Esempio di dati inviati:
 
 ## 2. ModuloB
 
-<img width="826" height="662" alt="ModuloB" src="https://github.com/user-attachments/assets/3b24b5b4-0892-4683-be1d-07c884082686" />
+<img width="901" height="716" alt="ModuloB" src="https://github.com/user-attachments/assets/7d79e3ab-da4b-4317-91d7-e6963c3c493e" />
 
 <br><br>
 
@@ -158,7 +158,7 @@ Esempio di dati inviati:
 
 ## 3. ModuloC
 
-<img width="802" height="720" alt="ModuloC" src="https://github.com/user-attachments/assets/d33f2a86-7496-4199-83d7-9bac5b1fd5ba" />
+<img width="792" height="723" alt="ModuloC" src="https://github.com/user-attachments/assets/f7f4e038-95c8-4f98-9709-067d31cbaec1" />
 
 <br><br>
 
