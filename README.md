@@ -108,7 +108,7 @@ Estrarre `libraries.zip` all'interno della cartella `C:\Users\%USERPROFILE%\Docu
 
 ## 1. ModuloA
 
-<img width="912" height="540" alt="image" src="https://github.com/user-attachments/assets/092ea132-b699-40a9-a8d6-75a042c1687d" />
+<img width="602" height="662" alt="ModuloA" src="https://github.com/user-attachments/assets/75a2bb8d-df2d-480f-bab2-1d8166e463b7" />
 
 <br><br>
 
@@ -133,7 +133,7 @@ Esempio di dati inviati:
 
 ## 2. ModuloB
 
-<img width="986" height="530" alt="image" src="https://github.com/user-attachments/assets/2a0e6bcc-ffef-49de-8ba9-27df456c938a" />
+<img width="826" height="662" alt="ModuloB" src="https://github.com/user-attachments/assets/3b24b5b4-0892-4683-be1d-07c884082686" />
 
 <br><br>
 
@@ -158,7 +158,7 @@ Esempio di dati inviati:
 
 ## 3. ModuloC
 
-<img width="897" height="520" alt="image" src="https://github.com/user-attachments/assets/401373b9-26b6-440e-ab7c-1bd358575cdf" />
+<img width="802" height="720" alt="ModuloC" src="https://github.com/user-attachments/assets/d33f2a86-7496-4199-83d7-9bac5b1fd5ba" />
 
 <br><br>
 
