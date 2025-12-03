@@ -90,7 +90,7 @@ Il file di configurazione `config.py` permette di modificare alcuni parametri re
 Le informazioni di comunicazione ed eventuali errori saranno salvati all'interno di: `logfile.log`
 
 ## Librerie Arduino
-Estrarre `libraries.zip` all'interno della cartella `C:\Users\%USERPROFILE%\Documents\Arduino\`, riavviare eventualmente Arduino IDE
+Estrarre `libraries.zip` all'interno della cartella `C:\Users\%USERPROFILE%\Documents\Arduino\`, riavviare eventualmente Arduino IDE.
 
 ## Configurazione LoRa
 - Lora Modulo A
