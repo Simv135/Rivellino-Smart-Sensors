@@ -178,3 +178,11 @@ Esempio di dati inviati:
 | h    | Umidità                    | %            |
 
 <br><br>
+
+***ITS AEROSPAZIO PIEMONTE***
+
+***CORSO EMBT02***
+
+***Rivellino Smart Sensors***
+
+<br><br>
