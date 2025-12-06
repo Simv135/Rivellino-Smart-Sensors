@@ -56,7 +56,7 @@ I dati verranno elaborati dal ricevitore e salvati all'interno dei files CSV.
 | | |
 |:---:|:---:|
 | ![ModuloA](https://github.com/user-attachments/assets/4cb3a996-f35a-484c-b502-63b5ccda0648) | ![ModuloB](https://github.com/user-attachments/assets/6e28f377-c215-4d7e-a07a-ac02ab442f20) |
-| ModuloA | ModuloB e ModuloC |
+| [ModuloA](disegno_meccanico/moduloA/Case_Tirante.stl) | ModuloB e ModuloC |
 | ![ModuloA_Condotto](https://github.com/user-attachments/assets/a95124b8-e612-47c0-9490-474b2da2c831) | ![Coperchio](https://github.com/user-attachments/assets/f67974d0-79c0-44b9-8a58-a31172c024fd) |
 | Condotto Aria (ModuloA) | Coperchio (ModuloA, ModuloB e Modulo C) |
 
